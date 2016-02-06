@@ -5,6 +5,8 @@ AM_CPPFLAGS = \
 -I$(top_srcdir)/src/C
 
 AM_CFLAGS = -DENABLE_FITSIO
+AM_CXXFLAGS =
+AM_FCFLAGS =
 
 AM_LDFLAGS =
 AM_LIBS = 
@@ -22,7 +24,7 @@ libchealpix_la_SOURCES = \
 chealpix.c
 
 libchealpix_la_LDFLAGS = -version-info @HEALPIX_LT_VERSION@
-libtidas_la_LIBADD = 
+libchealpix_la_LIBADD = 
 
 
 bin_PROGRAMS = test_chealpix
@@ -31,4 +33,6 @@ TESTS = test_chealpix
 test_chealpix_SOURCES = \
 test_chealpix.c
 
-test_chealpix_LDADD = $(AM_LIBS)
+test_chealpix_LDADD = \
+$(top_builddir)/src/C/libchealpix.la \
+$(AM_LIBS)

@@ -26,13 +26,13 @@ dnl +---------------------
 dnl | Compiler features
 dnl +---------------------
 dnl Set default optimization to '-O3' instead of the default '-g -O2'
-if test x"${CFLAGS}" = x; then
+if test x"$CFLAGS" = x; then
    CFLAGS="-O3"
 fi
-if test x"${CXXFLAGS}" = x; then
+if test x"$CXXFLAGS" = x; then
    CXXFLAGS="-O3"
 fi
-if test x"${FCFLAGS}" = x; then
+if test x"$FCFLAGS" = x; then
    FCFLAGS="-O3"
 fi
 AC_CANONICAL_HOST
@@ -84,7 +84,7 @@ if test $healpix_fortran = yes; then
   ACX_FC_PP_DEFINE
   AX_F90_MODULE_EXTENSION
   FCMODEXT="$ax_cv_f90_modext"
-  if test x"${FDOPT}" = x; then
+  if test x"$FDOPT" = x; then
     FDOPT="-D"
   fi
   AC_ARG_VAR(FDOPT,[Fortran flag for preprocessor variables (typically "-D" or "-WF,-D")])
@@ -100,8 +100,8 @@ AC_ARG_ENABLE(idl, [AC_HELP_STRING([--disable-idl], [Do not install IDL tools])]
 if test $healpix_idl = yes; then
   AC_ARG_VAR(IDL,[IDL executable to use])
   AC_CHECK_PROG([IDLEXEC], [idl])
-  if test x"${IDL}" = x; then
-     IDL=${IDLEXEC}
+  if test x"$IDL" = x; then
+     IDL=$IDLEXEC
   fi
   AC_SUBST(IDL)
 fi
@@ -118,7 +118,7 @@ dnl +------------------------------------------------
 AC_LANG_PUSH([C])
 ACX_CFITSIO([], [AC_MSG_ERROR([Could not find the CFITSIO library!])])
 if test "$acx_cfitsio_fortran" = no; then
-  if test x"${acx_use_f90lib}" != xno; then
+  if test x"$healpix_fortran" != xno; then
     AC_MSG_WARN([This CFITSIO library is old and/or does not include Fortran support.])
     AC_MSG_WARN([    Disabling F90 HEALPix!])
     healpix_fortran=no
@@ -201,23 +201,23 @@ dnl +----------------------------------------------
 dnl | Check for helper applications
 dnl +----------------------------------------------
 acx_img_view=""
-AC_ARG_WITH(image-viewer, [AC_HELP_STRING([--with-image-viewer], [Image viewing application to use])], [acx_img_view=${withval}])
+AC_ARG_WITH(image-viewer, [AC_HELP_STRING([--with-image-viewer], [Image viewing application to use])], [acx_img_view=$withval])
 AC_CHECK_PROGS([IMGVIEW], [$acx_img_view open display gwenview eeyes xv])
 dnl
 acx_ps_view=""
-AC_ARG_WITH(ps-viewer, [AC_HELP_STRING([--with-ps-viewer], [PostScript viewing application to use])], [acx_ps_view=${withval}])
+AC_ARG_WITH(ps-viewer, [AC_HELP_STRING([--with-ps-viewer], [PostScript viewing application to use])], [acx_ps_view=$withval])
 AC_CHECK_PROGS([PSVIEW], [$acx_ps_view open okular kghostview ghostview gv ggv gs])
 dnl
 acx_paper_size="a4"
-AC_ARG_WITH(paper-size, [AC_HELP_STRING([--with-paper-size], [Paper size (a4, letter, etc) to use for printing from IDL])], [acx_paper_size=${withval}])
-IDLPAPER=${acx_paper_size}
+AC_ARG_WITH(paper-size, [AC_HELP_STRING([--with-paper-size], [Paper size (a4, letter, etc) to use for printing from IDL])], [acx_paper_size=$withval])
+IDLPAPER=$acx_paper_size
 AC_SUBST([IDLPAPER])
 
 dnl +------------------------------------------------
 dnl | Makefiles to generate
 dnl +------------------------------------------------
 AC_CONFIG_FILES([Makefile])
-dnl AC_CONFIG_FILES([data/Makefile])
+AC_CONFIG_FILES([data/Makefile])
 dnl AC_CONFIG_FILES([test/Makefile])
 AC_CONFIG_FILES([src/Makefile])
 AC_CONFIG_FILES([src/C/Makefile])
@@ -265,47 +265,47 @@ dnl +------------------------------------------------
 AC_MSG_NOTICE([                                           ])
 AC_MSG_NOTICE([============== Configuration ==============])
 AC_MSG_NOTICE([                                           ])
-if test x"${CC}" = x; then
+if test x"$CC" = x; then
   AC_MSG_NOTICE([  C Compiler         : Not found])
 else
   AC_MSG_NOTICE([  C Compiler         : $CC])
   AC_MSG_NOTICE([  C Compile flags    : $CFLAGS])
 fi
-if test x"${CXX}" = x; then
+if test x"$CXX" = x; then
   AC_MSG_NOTICE([  C++ Compiler       : Not found])
 else
   AC_MSG_NOTICE([  C++ Compiler       : $CXX])
   AC_MSG_NOTICE([  C++ Compile flags  : $CXXFLAGS])
 fi
-if test x"${FC}" = x; then
+if test x"$FC" = x; then
   AC_MSG_NOTICE([  F90 Compiler       : Not found])
 else
   AC_MSG_NOTICE([  F90 Compiler       : $FC])
   AC_MSG_NOTICE([  F90 Compile flags  : $FCFLAGS])
 fi
-if test x"${MPICC}" = x; then
+if test x"$MPICC" = x; then
   AC_MSG_NOTICE([  MPICC  Compiler    : Not found])
 else
   AC_MSG_NOTICE([  MPICC Compiler     : $MPICC])
 fi
-if test x"${MPICXX}" = x; then
+if test x"$MPICXX" = x; then
   AC_MSG_NOTICE([  MPICXX Compiler    : Not found])
 else
   AC_MSG_NOTICE([  MPICXX Compiler    : $MPICXX])
 fi
-if test x"${MPIFC}" = x; then
+if test x"$MPIFC" = x; then
   AC_MSG_NOTICE([  MPIF90 Compiler    : Not found])
 else
   AC_MSG_NOTICE([  MPIF90 Compiler    : $MPIFC])
 fi
-if test x"${ax_have_openmp}" = xyes; then
+if test x"$ax_have_openmp" = xyes; then
   AC_MSG_NOTICE([  OpenMP             : Detected ($OPENMP_CFLAGS)])
 else
   AC_MSG_NOTICE([  OpenMP             : Disabled])
 fi
 AC_MSG_NOTICE([  CFITSIO include    : $CFITSIO_CPPFLAGS])
 AC_MSG_NOTICE([  CFITSIO link       : $CFITSIO])
-if test x"${IDL}" = x; then
+if test x"$IDL" = x; then
   AC_MSG_NOTICE([  IDL executable     : Not found])
 else
   AC_MSG_NOTICE([  IDL executable     : $IDL])
@@ -316,25 +316,22 @@ AC_MSG_NOTICE([  IDL Paper Size     : $IDLPAPER])
 AC_MSG_NOTICE([                                           ])
 AC_MSG_NOTICE([========== Selected Build Targets =========])
 AC_MSG_NOTICE([                                           ])
-if test x"${acx_use_clib}" = xyes; then
-  AC_MSG_NOTICE([  C Library          : Yes])
-else
-  AC_MSG_NOTICE([  C Library          : No])
-fi
-if test x"${acx_use_f90lib}" = xyes; then
+AC_MSG_NOTICE([  C Library          : Yes])
+AC_MSG_NOTICE([  C++ Library        : Yes])
+if test x"$healpix_fortran" = xyes; then
   AC_MSG_NOTICE([  F90 Library        : Yes])
 else
   AC_MSG_NOTICE([  F90 Library        : No])
 fi
-if test x"${acx_use_cxxlib}" = xyes; then
-  AC_MSG_NOTICE([  C++ Library        : Yes])
-else
-  AC_MSG_NOTICE([  C++ Library        : No])
-fi
-if test x"${acx_use_idllib}" = xyes; then
+if test x"$healpix_idl" = xyes; then
   AC_MSG_NOTICE([  IDL Tools          : Yes])
 else
   AC_MSG_NOTICE([  IDL Tools          : No])
+fi
+if test x"$healpix_python" = xyes; then
+  AC_MSG_NOTICE([  Python package     : Yes])
+else
+  AC_MSG_NOTICE([  Python package     : No])
 fi
 AC_MSG_NOTICE([                                           ])
 AC_MSG_NOTICE([===========================================])
