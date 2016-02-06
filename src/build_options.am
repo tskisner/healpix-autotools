@@ -1,0 +1,24 @@
+
+# Append OpenMP flags
+
+if HAVE_AM_OPENMP
+  AM_CFLAGS += $(OPENMP_CFLAGS)
+  AM_CXXFLAGS += $(OPENMP_CFLAGS)
+  AM_FCFLAGS += $(OPENMP_CFLAGS)
+  AM_LIBS += $(OPENMP_CFLAGS)
+endif
+
+# Append CFITSIO flags
+
+AM_CPPFLAGS += $(CFITSIO_CPPFLAGS)
+AM_LIBS += $(CFITSIO)
+
+# If building full-static, pass options to libtool
+
+if USE_AM_ALLSTATIC
+  AM_LDFLAGS += -all-static
+endif
+
+# Always need the C math library
+
+AM_LIBS += -lm
