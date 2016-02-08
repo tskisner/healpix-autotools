@@ -4,6 +4,9 @@
 AM_CPPFLAGS = \
 -I$(top_srcdir)/src/C
 
+AM_LDFLAGS = \
+-L$(top_builddir)/src/C
+
 AM_CFLAGS = -DENABLE_FITSIO
 AM_CXXFLAGS =
 AM_FCFLAGS =
