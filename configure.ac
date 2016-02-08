@@ -228,6 +228,7 @@ AC_CONFIG_FILES([src/cxx/libsharp/Makefile])
 AC_CONFIG_FILES([src/cxx/cxxsupport/Makefile])
 AC_CONFIG_FILES([src/cxx/Healpix_cxx/Makefile])
 AC_CONFIG_FILES([src/cxx/alice/Makefile])
+AC_CONFIG_FILES([src/cxx/test/Makefile])
 
 
 dnl AC_CONFIG_FILES([src/f90/Makefile])
@@ -245,10 +246,6 @@ dnl AC_CONFIG_FILES([src/f90/smoothing/Makefile])
 dnl AC_CONFIG_FILES([src/f90/synfast/Makefile])
 dnl AC_CONFIG_FILES([src/f90/ud_grade/Makefile])
 
-dnl 
-dnl 
-dnl AC_CONFIG_FILES([src/cxx/test/Makefile])
-dnl AC_CONFIG_FILES([src/cxx/alice/Makefile])
 dnl AC_CONFIG_FILES([src/idl/Makefile])
 dnl AC_CONFIG_FILES([src/idl/examples/Makefile])
 dnl AC_CONFIG_FILES([src/idl/fits/Makefile])
