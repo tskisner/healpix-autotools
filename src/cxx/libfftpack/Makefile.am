@@ -21,8 +21,6 @@ EXTRA_DIST = README
 noinst_HEADERS = fftpack.h bluestein.h
 include_HEADERS = ls_fft.h
 
-lib_LTLIBRARIES = libfftpack.la
+noinst_LTLIBRARIES = libfftpack.la
 libfftpack_la_SOURCES = fftpack.c bluestein.c ls_fft.c
-libfftpack_la_LDFLAGS = -version-info @HEALPIX_LT_VERSION@
-libfftpack_la_LIBADD = 
 

@@ -37,7 +37,7 @@ sharp_lowlevel.h \
 sharp_geomhelpers.h \
 sharp_almhelpers.h
 
-lib_LTLIBRARIES = libsharp.la
+noinst_LTLIBRARIES = libsharp.la
 
 libsharp_la_SOURCES = \
 sharp.c \
@@ -45,7 +45,4 @@ sharp_almhelpers.c \
 sharp_core.c \
 sharp_geomhelpers.c \
 sharp_ylmgen_c.c
-
-libsharp_la_LDFLAGS = -version-info @HEALPIX_LT_VERSION@
-libsharp_la_LIBADD = 
 

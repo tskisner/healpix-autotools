@@ -11,7 +11,6 @@ AM_CFLAGS = -DENABLE_FITSIO
 AM_CXXFLAGS =
 AM_FCFLAGS =
 
-AM_LDFLAGS =
 AM_LIBS = 
 
 # Append compile and linking flags based on configure variables

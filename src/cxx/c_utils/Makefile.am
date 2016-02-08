@@ -20,8 +20,6 @@ EXTRA_DIST =
 noinst_HEADERS = sse_utils.h walltime_c.h
 include_HEADERS = c_utils.h
 
-lib_LTLIBRARIES = libc_utils.la
+noinst_LTLIBRARIES = libc_utils.la
 libc_utils_la_SOURCES = c_utils.c walltime_c.c
-libc_utils_la_LDFLAGS = -version-info @HEALPIX_LT_VERSION@
-libc_utils_la_LIBADD = 
 
