@@ -2,10 +2,8 @@
 # Initialize compile and linking flags
 
 AM_CPPFLAGS = \
+-I$(top_srcdir)/src/cxx/c_utils \
 -I$(top_srcdir)/src/cxx/libfftpack
-
-AM_LDFLAGS = \
--L$(top_builddir)/src/cxx/libfftpack
 
 AM_CFLAGS = 
 AM_CXXFLAGS =

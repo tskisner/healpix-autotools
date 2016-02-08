@@ -1,4 +1,4 @@
-SUBDIRS = C #cxx
+SUBDIRS = C cxx
 
 #if HAVE_AM_FC
 #  SUBDIRS += f90
