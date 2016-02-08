@@ -34,6 +34,7 @@ lt~obsolete.m4
 Makefile
 Makefile.in
 *.o
+*.mod
 *.lo
 *.la
 *~
@@ -57,3 +58,9 @@ Makefile.in
 /src/cxx/Healpix_cxx/udgrade_harmonic_cxx
 /src/cxx/alice/alice3
 
+/src/f90/libhealpix/alm_map_ss_inc.F90
+/src/f90/libhealpix/alm_map_dd_inc.F90
+/src/f90/libhealpix/fits_s_inc.f90
+/src/f90/libhealpix/fits_d_inc.f90
+/src/f90/libhealpix/udgrade_s_inc.f90
+/src/f90/libhealpix/udgrade_d_inc.f90

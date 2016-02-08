@@ -1,5 +1,5 @@
 
-SUBDIRS = libhealpix
+SUBDIRS = libsharp_f libhealpix
 
 #if HAVE_AM_MPI_FC
 #  SUBDIRS += libhealpix-mpi

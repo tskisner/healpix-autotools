@@ -230,6 +230,7 @@ AC_CONFIG_FILES([src/cxx/Healpix_cxx/Makefile])
 AC_CONFIG_FILES([src/cxx/alice/Makefile])
 AC_CONFIG_FILES([src/cxx/test/Makefile])
 AC_CONFIG_FILES([src/f90/Makefile])
+AC_CONFIG_FILES([src/f90/libsharp_f/Makefile])
 AC_CONFIG_FILES([src/f90/libhealpix/Makefile])
 AC_CONFIG_FILES([src/f90/libhealpix-mpi/Makefile])
 

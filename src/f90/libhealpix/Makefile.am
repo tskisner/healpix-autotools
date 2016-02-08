@@ -2,9 +2,11 @@
 # Initialize compile and linking flags
 
 AM_CPPFLAGS = \
+-I$(top_srcdir)/src/f90/libsharp_f \
 -I$(top_srcdir)/src/f90/libhealpix
 
 AM_LDFLAGS = \
+-L$(top_builddir)/src/f90/libsharp_f \
 -L$(top_builddir)/src/f90/libhealpix
 
 AM_CFLAGS = 
@@ -258,6 +260,12 @@ long_intrinsic.F90 \
 mask_tools.F90
 
 libhealpix_la_LDFLAGS = -version-info @HEALPIX_LT_VERSION@
-libhealpix_la_LIBADD = $(AM_LIBS)
+
+libhealpix_la_LIBADD = \
+$(top_builddir)/src/f90/libsharp_f/libsharp_f.la \
+$(top_builddir)/src/cxx/libsharp/libsharp.la \
+$(top_builddir)/src/cxx/libfftpack/libfftpack.la \
+$(top_builddir)/src/cxx/c_utils/libc_utils.la \
+$(AM_LIBS)
 
 
