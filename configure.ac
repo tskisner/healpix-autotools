@@ -224,6 +224,7 @@ AC_CONFIG_FILES([src/C/Makefile])
 AC_CONFIG_FILES([src/cxx/Makefile])
 AC_CONFIG_FILES([src/cxx/c_utils/Makefile])
 AC_CONFIG_FILES([src/cxx/libfftpack/Makefile])
+AC_CONFIG_FILES([src/cxx/libsharp/Makefile])
 
 dnl AC_CONFIG_FILES([src/f90/Makefile])
 dnl AC_CONFIG_FILES([src/f90/libhealpix/Makefile])
