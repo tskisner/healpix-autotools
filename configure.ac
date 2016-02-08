@@ -227,6 +227,7 @@ AC_CONFIG_FILES([src/cxx/libfftpack/Makefile])
 AC_CONFIG_FILES([src/cxx/libsharp/Makefile])
 AC_CONFIG_FILES([src/cxx/cxxsupport/Makefile])
 AC_CONFIG_FILES([src/cxx/Healpix_cxx/Makefile])
+AC_CONFIG_FILES([src/cxx/alice/Makefile])
 
 
 dnl AC_CONFIG_FILES([src/f90/Makefile])
