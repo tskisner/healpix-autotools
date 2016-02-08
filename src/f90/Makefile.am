@@ -1,7 +1,7 @@
 
 SUBDIRS = libhealpix
 
-#if HAVE_AM_MPIFC
+#if HAVE_AM_MPI_FC
 #  SUBDIRS += libhealpix-mpi
 #endif
 

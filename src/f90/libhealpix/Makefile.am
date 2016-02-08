@@ -7,13 +7,14 @@ AM_CPPFLAGS = \
 AM_LDFLAGS = \
 -L$(top_builddir)/src/f90/libhealpix
 
-AM_CFLAGS = \
-$(FDOPT)HEALPIX=$(prefix) \
-$(FDOPT)HEALPIXDATA=$(datadir)/healpix \
-$(FDOPT)HEALPIXTEST=$(datadir)/healpix/test
+AM_CFLAGS = 
 
 AM_CXXFLAGS =
-AM_FCFLAGS =
+
+AM_FCFLAGS = \
+$(FDOPT)HEALPIX=\'$(prefix)\' \
+$(FDOPT)HEALPIXDATA=\'$(datadir)/healpix\' \
+$(FDOPT)HEALPIXTEST=\'$(datadir)/healpix/test\'
 
 AM_LIBS = 
 
@@ -42,7 +43,8 @@ healpix_modules.mod \
 num_rec.mod \
 ran_tools.mod \
 utilities.mod \
-long_intrinsic.mod
+long_intrinsic.mod \
+mask_tools.mod
 
 BUILT_SOURCES = \
 alm_tools.mod \
@@ -65,7 +67,8 @@ healpix_modules.mod \
 num_rec.mod \
 ran_tools.mod \
 utilities.mod \
-long_intrinsic.mod
+long_intrinsic.mod \
+mask_tools.mod
 
 EXTRA_DIST = \
 paramfile_io.F90.in \
@@ -88,23 +91,33 @@ pixel_routines.F90 \
 remove_dipole_inc.f90 \
 source_gen_sort_inc.f90
 
-noinst_SCRIPTS = gen_alm_code gen_fits_code gen_udgrade_code
+noinst_SCRIPTS = \
+gen_alm_code \
+gen_fits_code \
+gen_udgrade_code
 
-CLEANFILES = alm_map_ss_inc.f90 alm_map_dd_inc.f90 fits_s_inc.f90 fits_d_inc.f90 udgrade_s_inc.f90 udgrade_d_inc.f90 *.mod *.MOD
+CLEANFILES = \
+alm_map_ss_inc.f90 \
+alm_map_dd_inc.f90 \
+fits_s_inc.f90 \
+fits_d_inc.f90 \
+udgrade_s_inc.f90 \
+udgrade_d_inc.f90 \
+*.mod *.MOD
 
 
-alm_map_ss_inc.f90 : $(srcdir)/alm_map_template.f90 $(srcdir)/gen_alm_code
-    @$(srcdir)/gen_alm_code "$(srcdir)/alm_map_template.f90"
+alm_map_ss_inc.F90 : $(srcdir)/alm_map_template.F90 $(srcdir)/gen_alm_code
+	@$(srcdir)/gen_alm_code "$(srcdir)/alm_map_template.F90"
 
-alm_map_dd_inc.f90 : alm_map_ss_inc.f90
+alm_map_dd_inc.F90 : alm_map_ss_inc.F90
 
 fits_s_inc.f90 : $(srcdir)/fits_template.f90 $(srcdir)/gen_fits_code
-    @$(srcdir)/gen_fits_code "$(srcdir)/fits_template.f90"
+	@$(srcdir)/gen_fits_code "$(srcdir)/fits_template.f90"
 
 fits_d_inc.f90 : fits_s_inc.f90
 
 udgrade_s_inc.f90 : $(srcdir)/udgrade_template.f90 $(srcdir)/gen_udgrade_code
-    @$(srcdir)/gen_udgrade_code "$(srcdir)/udgrade_template.f90"
+	@$(srcdir)/gen_udgrade_code "$(srcdir)/udgrade_template.f90"
 
 udgrade_d_inc.f90 : udgrade_s_inc.f90
 
@@ -150,16 +163,18 @@ utilities.mod : utilities.lo
 
 long_intrinsic.mod : long_intrinsic.lo
 
+mask_tools.mod : mask_tools.lo
+
 obj0 = healpix_types.lo cgetEnvironment.lo indmed.lo utilities.lo
 obj1 = bit_manipulation.lo extension.lo obsolete.lo ran_tools_dist.lo rngmod.lo long_intrinsic.lo
 obj2 = healpix_fft.lo misc_utils.lo
 obj3 = head_fits.lo num_rec.lo statistics.lo paramfile_io.lo 
 obj4 = pix_tools.lo 
 obj5 = coord_v_convert.lo fitstools.lo udgrade_nr.lo
-obj6 = alm_tools.lo
+obj6 = alm_tools.lo mask_tools.lo
 obj7 = healpix_modules.lo
 
-incalm = alm_map_ss_inc.f90 alm_map_dd_inc.f90
+incalm = alm_map_ss_inc.F90 alm_map_dd_inc.F90
 
 incpix = $(srcdir)/convert_inplace_1d_inc.f90 \
     $(srcdir)/convert_inplace_nd_inc.f90 \
@@ -173,13 +188,13 @@ incfits = fits_s_inc.f90 fits_d_inc.f90
 
 incudgrade = udgrade_s_inc.f90 udgrade_d_inc.f90
 
-$(srcdir)/pix_tools.f90 : $(incpix)
+$(srcdir)/pix_tools.lo : $(incpix)
 
-$(srcdir)/alm_tools.f90 : $(incalm)
+$(srcdir)/alm_tools.lo : $(incalm)
 
-$(srcdir)/fitstools.f90 : $(incfits)
+$(srcdir)/fitstools.lo : $(incfits)
 
-$(srcdir)/udgrade_nr.f90 : $(incudgrade)
+$(srcdir)/udgrade_nr.lo : $(incudgrade)
 
 #obj1
 bit_manipulation.lo : $(obj0)
@@ -208,6 +223,7 @@ coord_v_convert.lo : $(obj4)
 udgrade_nr.lo : $(obj4)
 
 #obj6
+mask_tools.lo : $(obj5)
 alm_tools.lo : $(obj5)
 
 #obj7
@@ -221,7 +237,7 @@ healpix_types.F90 \
 cgetEnvironment.c \
 indmed.f90 \
 utilities.f90 \
-bit_manipulation.f90 \
+bit_manipulation.F90 \
 extension.F90 \
 obsolete.f90 \
 ran_tools_dist.f90 \
@@ -229,16 +245,17 @@ rngmod.f90 \
 healpix_fft.F90 \
 misc_utils.F90 \
 head_fits.F90 \
-num_rec.f90 \
+num_rec.F90 \
 statistics.f90 \
-pix_tools.f90 \
+pix_tools.F90 \
 coord_v_convert.f90 \
-fitstools.f90 \
+fitstools.F90 \
 udgrade_nr.f90 \
-alm_tools.f90 \
+alm_tools.F90 \
 healpix_modules.f90 \
 paramfile_io.F90 \
-long_intrinsic.F90
+long_intrinsic.F90 \
+mask_tools.F90
 
 libhealpix_la_LDFLAGS = -version-info @HEALPIX_LT_VERSION@
 libhealpix_la_LIBADD = $(AM_LIBS)

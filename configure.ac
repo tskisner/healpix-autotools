@@ -229,12 +229,12 @@ AC_CONFIG_FILES([src/cxx/cxxsupport/Makefile])
 AC_CONFIG_FILES([src/cxx/Healpix_cxx/Makefile])
 AC_CONFIG_FILES([src/cxx/alice/Makefile])
 AC_CONFIG_FILES([src/cxx/test/Makefile])
-
 AC_CONFIG_FILES([src/f90/Makefile])
 AC_CONFIG_FILES([src/f90/libhealpix/Makefile])
+AC_CONFIG_FILES([src/f90/libhealpix-mpi/Makefile])
 
 dnl 
-dnl AC_CONFIG_FILES([src/f90/libhealpix-mpi/Makefile])
+dnl 
 dnl AC_CONFIG_FILES([src/f90/libhpxgif/Makefile])
 dnl AC_CONFIG_FILES([src/f90/alteralm/Makefile])
 dnl AC_CONFIG_FILES([src/f90/anafast/Makefile])
