@@ -42,3 +42,18 @@ Makefile.in
 
 /src/C/test_chealpix
 
+/src/cxx/Healpix_cxx/alm2map_cxx
+/src/cxx/Healpix_cxx/anafast_cxx
+/src/cxx/Healpix_cxx/calc_powspec
+/src/cxx/Healpix_cxx/hotspots_cxx
+/src/cxx/Healpix_cxx/hpxtest
+/src/cxx/Healpix_cxx/map2tga
+/src/cxx/Healpix_cxx/median_filter_cxx
+/src/cxx/Healpix_cxx/mult_alm
+/src/cxx/Healpix_cxx/rotalm_cxx
+/src/cxx/Healpix_cxx/smoothing_cxx
+/src/cxx/Healpix_cxx/syn_alm_cxx
+/src/cxx/Healpix_cxx/udgrade_cxx
+/src/cxx/Healpix_cxx/udgrade_harmonic_cxx
+/src/cxx/alice/alice3
+

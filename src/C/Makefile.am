@@ -38,3 +38,5 @@ test_chealpix.c
 test_chealpix_LDADD = \
 $(top_builddir)/src/C/libchealpix.la \
 $(AM_LIBS)
+
+CLEANFILES = test_output.fits
