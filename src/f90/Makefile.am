@@ -17,5 +17,6 @@ process_mask \
 smoothing \
 synfast \
 ud_grade \
-ngsims_full_sky
+ngsims_full_sky \
+test
 

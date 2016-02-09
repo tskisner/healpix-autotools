@@ -41,7 +41,13 @@ Makefile.in
 
 # Specific build outputs
 
+test-suite.log
+
 /src/C/test_chealpix
+/src/C/test_chealpix.log
+/src/C/test_chealpix.trs
+/src/C/test_output.fits
+
 
 /src/cxx/Healpix_cxx/alm2map_cxx
 /src/cxx/Healpix_cxx/anafast_cxx
@@ -57,6 +63,34 @@ Makefile.in
 /src/cxx/Healpix_cxx/udgrade_cxx
 /src/cxx/Healpix_cxx/udgrade_harmonic_cxx
 /src/cxx/alice/alice3
+
+/src/cxx/Healpix_cxx/hpxtest.log
+/src/cxx/Healpix_cxx/hpxtest.trs
+/src/cxx/Healpix_cxx/test-suite.log
+/src/cxx/test/runtest.sh.log
+/src/cxx/test/runtest.sh.trs
+/src/cxx/test/test-suite.log
+/src/cxx/test/test.alm
+/src/cxx/test/test.fits
+/src/cxx/test/test.tga
+/src/cxx/test/test2.alm
+/src/cxx/test/test2.fits
+/src/cxx/test/test2.tga
+/src/cxx/test/test3.fits
+/src/cxx/test/test3.tga
+/src/cxx/test/test4.fits
+/src/cxx/test/test4.tga
+/src/cxx/test/test5.fits
+/src/cxx/test/test5.tga
+/src/cxx/test/test6.tga
+/src/cxx/test/test7.fits
+/src/cxx/test/test_alice1.tga
+/src/cxx/test/test_alice2.tga
+/src/cxx/test/test_alice3.tga
+/src/cxx/test/test_alice3_background.fits
+/src/cxx/test/test_alice3_mod_texture.fits
+/src/cxx/test/test_alice3_texture.fits
+/src/cxx/test/test_cl.fits
 
 /src/f90/libhealpix/alm_map_ss_inc.F90
 /src/f90/libhealpix/alm_map_dd_inc.F90
@@ -79,6 +113,29 @@ Makefile.in
 /src/f90/ud_grade/ud_grade
 /src/f90/ngsims_full_sky/sky_ng_sim
 /src/f90/ngsims_full_sky/sky_ng_sim_bin
+
+/src/f90/test/runtest.sh.log
+/src/f90/test/runtest.sh.trs
+/src/f90/test/test-suite.log
+/src/f90/test/test_LOres.fits
+/src/f90/test/test_LOres.gif
+/src/f90/test/test_alm.fits
+/src/f90/test/test_almdec.fits
+/src/f90/test/test_cl.fits
+/src/f90/test/test_distmask.fits
+/src/f90/test/test_distmask.gif
+/src/f90/test/test_ext.fits
+/src/f90/test/test_ext.gif
+/src/f90/test/test_map.fits
+/src/f90/test/test_map.gif
+/src/f90/test/test_max.asc
+/src/f90/test/test_mf.fits
+/src/f90/test/test_mf.gif
+/src/f90/test/test_min.asc
+/src/f90/test/test_ngfs.fits
+/src/f90/test/test_ngfs.gif
+/src/f90/test/test_sm.fits
+/src/f90/test/test_sm.gif
 
 /src/idl/hidl
 /src/idl/hidlde
