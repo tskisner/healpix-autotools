@@ -1,0 +1,39 @@
+#!/bin/sh
+
+if test x"${IDL_DIR}" != x; then
+   export IDL_PATH=${IDL_PATH}:${IDL_DIR}/lib
+fi
+
+prefix=@PREFIX@
+bindir=@BINDIR@
+datadir=@DATADIR@
+
+idldir=${datadir}/idl
+
+idlstartup=${idldir}/HEALPix_startup
+
+export IDL_PATH="${IDL_PATH}:${idldir}"
+export IDL_PATH="${IDL_PATH}:${idldir}/misc"
+export IDL_PATH="${IDL_PATH}:${idldir}/examples"
+export IDL_PATH="${IDL_PATH}:${idldir}/fits"
+export IDL_PATH="${IDL_PATH}:${idldir}/interfaces"
+export IDL_PATH="${IDL_PATH}:${idldir}/toolkit"
+export IDL_PATH="${IDL_PATH}:${idldir}/visu"
+export IDL_PATH="${IDL_PATH}:${idldir}/zzz_external/obsolete_astron"
+export IDL_PATH="${IDL_PATH}:${idldir}/zzz_external/astron"
+export IDL_PATH="${IDL_PATH}:${idldir}/zzz_external/cgis"
+export IDL_PATH="${IDL_PATH}:${idldir}/zzz_external/epstopdf"
+export IDL_PATH="${IDL_PATH}:${idldir}/zzz_external/textoidl"
+
+export IDL_STARTUP="${idlstartup}"
+export HEALPIX="${prefix}"
+export HEXE="${bindir}"
+export hpx_path_data="${datadir}"
+export hpx_path_test="${bindir}"
+export hpx_path_doc_html="${datadir}/doc"
+export hpx_path_doc_pdf="${datadir}/doc"
+export hpx_path_bin_f90="${bindir}"
+export hpx_path_bin_cxx="${bindir}"
+
+idl
+

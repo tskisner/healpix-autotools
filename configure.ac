@@ -189,22 +189,6 @@ fi
 AC_LANG_POP([C])
 AM_CONDITIONAL([HAVE_AM_PYTHON], [test $healpix_python = yes])
 
-dnl +----------------------------------------------
-dnl | Check for helper applications
-dnl +----------------------------------------------
-acx_img_view=""
-AC_ARG_WITH(image-viewer, [AC_HELP_STRING([--with-image-viewer], [Image viewing application to use])], [acx_img_view=$withval])
-AC_CHECK_PROGS([IMGVIEW], [$acx_img_view open display gwenview eeyes xv])
-dnl
-acx_ps_view=""
-AC_ARG_WITH(ps-viewer, [AC_HELP_STRING([--with-ps-viewer], [PostScript viewing application to use])], [acx_ps_view=$withval])
-AC_CHECK_PROGS([PSVIEW], [$acx_ps_view open okular kghostview ghostview gv ggv gs])
-dnl
-acx_paper_size="a4"
-AC_ARG_WITH(paper-size, [AC_HELP_STRING([--with-paper-size], [Paper size (a4, letter, etc) to use for printing from IDL])], [acx_paper_size=$withval])
-IDLPAPER=$acx_paper_size
-AC_SUBST([IDLPAPER])
-
 dnl +------------------------------------------------
 dnl | Makefiles to generate
 dnl +------------------------------------------------
@@ -237,8 +221,8 @@ AC_CONFIG_FILES([src/f90/process_mask/Makefile])
 AC_CONFIG_FILES([src/f90/smoothing/Makefile])
 AC_CONFIG_FILES([src/f90/synfast/Makefile])
 AC_CONFIG_FILES([src/f90/ud_grade/Makefile])
+AC_CONFIG_FILES([src/idl/Makefile])
 
-dnl AC_CONFIG_FILES([src/idl/Makefile])
 dnl AC_CONFIG_FILES([src/idl/examples/Makefile])
 dnl AC_CONFIG_FILES([src/idl/fits/Makefile])
 dnl AC_CONFIG_FILES([src/idl/interfaces/Makefile])
@@ -298,9 +282,6 @@ if test x"$IDL" = x; then
 else
   AC_MSG_NOTICE([  IDL executable     : $IDL])
 fi
-AC_MSG_NOTICE([  Image Viewer       : $IMGVIEW])
-AC_MSG_NOTICE([  PostScript Viewer  : $PSVIEW])
-AC_MSG_NOTICE([  IDL Paper Size     : $IDLPAPER])
 AC_MSG_NOTICE([                                           ])
 AC_MSG_NOTICE([========== Selected Build Targets =========])
 AC_MSG_NOTICE([                                           ])

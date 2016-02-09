@@ -80,4 +80,5 @@ Makefile.in
 /src/f90/ngsims_full_sky/sky_ng_sim
 /src/f90/ngsims_full_sky/sky_ng_sim_bin
 
-
+/src/idl/hidl
+/src/idl/hidlde
