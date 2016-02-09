@@ -77,4 +77,7 @@ Makefile.in
 /src/f90/smoothing/smoothing
 /src/f90/synfast/synfast
 /src/f90/ud_grade/ud_grade
+/src/f90/ngsims_full_sky/sky_ng_sim
+/src/f90/ngsims_full_sky/sky_ng_sim_bin
+
 

@@ -16,7 +16,6 @@ plmgen \
 process_mask \
 smoothing \
 synfast \
-ud_grade
-
-#ngsims_full_sky
+ud_grade \
+ngsims_full_sky
 
