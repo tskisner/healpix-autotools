@@ -223,6 +223,7 @@ AC_CONFIG_FILES([src/f90/synfast/Makefile])
 AC_CONFIG_FILES([src/f90/ud_grade/Makefile])
 AC_CONFIG_FILES([src/f90/test/Makefile])
 AC_CONFIG_FILES([src/idl/Makefile])
+AC_CONFIG_FILES([src/healpy/Makefile])
 AC_OUTPUT
 dnl +------------------------------------------------
 dnl | Print out detected build options

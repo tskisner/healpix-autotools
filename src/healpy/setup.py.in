@@ -84,23 +84,6 @@ else:
         numpy_inc = get_include()
 
 
-class custom_build_ext(build_ext):
-    def run(self):
-        # If we were asked to build any C/C++ libraries, add the directory
-        # where we built them to the include path. (It's already on the library
-        # path.)
-        if self.distribution.has_c_libraries():
-            self.run_command('build_clib')
-            build_clib = self.get_finalized_command('build_clib')
-            for key, value in build_clib.build_args.items():
-                for ext in self.extensions:
-                    if not hasattr(ext, key) or getattr(ext, key) is None:
-                        setattr(ext, key, value)
-                    else:
-                        getattr(ext, key).extend(value)
-        build_ext.run(self)
-
-
 class PyTest(TestCommand):
     """Custom Setuptools test command to run doctests with py.test. Based on
     http://pytest.org/latest/goodpractises.html#integration-with-setuptools-test-commands"""
@@ -132,23 +115,28 @@ healpy_fitsio_src = '_healpy_fitsio_lib.cc'
 pixel_lib = Extension('healpy._healpy_pixel_lib',
                       sources=[join('healpy','src', healpy_pixel_lib_src)],
                       include_dirs=[numpy_inc],
+                      libraries=['healpix_cxx', 'cfitsio', 'm'],
+                      extra_link_args=[@EXTRA@],
                       language='c++'
                       )
 
 spht_lib = Extension('healpy._healpy_sph_transform_lib',
                      sources=[join('healpy','src', healpy_spht_src)],
                      include_dirs=[numpy_inc],
+                     libraries=['healpix_cxx', 'cfitsio', 'm'],
+                     extra_link_args=[@EXTRA@],
                      language='c++'
                      )
 
 hfits_lib = Extension('healpy._healpy_fitsio_lib',
                       sources=[join('healpy','src', healpy_fitsio_src)],
                       include_dirs=[numpy_inc],
+                      libraries=['healpix_cxx', 'cfitsio', 'm'],
+                      extra_link_args=[@EXTRA@],
                       language='c++'
                       )
 
 install_requires = ['matplotlib', 'numpy', 'six']
-
 # Add install dependency on astropy, unless pyfits is already installed.
 try:
     import pyfits
@@ -156,30 +144,35 @@ except ImportError:
     install_requires.append('astropy')
 
 if on_rtd:
+    libraries = []
     cmdclass = {}
     extension_list = []
 else:
     cmdclass = {
-        'build_ext': custom_build_ext,
         'test': PyTest}
-
+    libraries = []
     extension_list = [pixel_lib, spht_lib, hfits_lib,
                       Extension("healpy._query_disc",
                                 ['healpy/src/_query_disc.'+extcpp],
                                 include_dirs=[numpy_inc],
+                                libraries=['healpix_cxx', 'cfitsio', 'm'],
+                                extra_link_args=[@EXTRA@],
                                 language='c++'),
                       Extension("healpy._sphtools", 
                                 ['healpy/src/_sphtools.'+extcpp],
                                 include_dirs=[numpy_inc],
+                                libraries=['healpix_cxx', 'cfitsio', 'm'],
+                                extra_link_args=[@EXTRA@],
                                 language='c++'),
                       Extension("healpy._pixelfunc", 
                                 ['healpy/src/_pixelfunc.'+extcpp],
                                 include_dirs=[numpy_inc],
+                                libraries=['healpix_cxx', 'cfitsio', 'm'],
+                                extra_link_args=[@EXTRA@],
                                 language='c++'),
                       ]
     for e in extension_list[-3:]: #extra setup for Cython extensions
         e.pyrex_directives = {"embedsignature": True}
-
 setup(name='healpy',
       version=get_version(),
       description='Healpix tools package for Python',
@@ -202,6 +195,7 @@ setup(name='healpy',
       author_email='cyrille.rosset@apc.univ-paris-diderot.fr',
       url='http://github.com/healpy',
       packages=['healpy','healpy.test'],
+      libraries=libraries,
       py_modules=['healpy.pixelfunc','healpy.sphtfunc',
                   'healpy.visufunc','healpy.fitsfunc',
                   'healpy.projector','healpy.rotator',
@@ -209,7 +203,7 @@ setup(name='healpy',
       cmdclass = cmdclass,
       ext_modules = extension_list,
       package_data = {'healpy': ['data/*.fits', 'data/totcls.dat', 'test/data/*.fits', 'test/data/*.sh']},
-      setup_requires=setup_requires,
+      setup_requires=[],
       install_requires=install_requires,
       tests_require=['pytest'],
       test_suite='healpy',

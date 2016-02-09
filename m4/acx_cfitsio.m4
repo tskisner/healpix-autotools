@@ -14,7 +14,7 @@
 #
 #   The user may use:
 # 
-#       --with-cfitsio-cpp=<flags> --with-cfitsio-libs=<flags> 
+#       --with-cfitsio=<dir> 
 #
 #   to manually specify the CFITSIO include and linking flags.
 #
@@ -67,6 +67,7 @@ acx_cfitsio_ok=no
 acx_cfitsio_fortran=no
 acx_cfitsio_default="-lcfitsio"
 
+CFITSIO_DIR=""
 CFITSIO_CPPFLAGS=""
 CFITSIO=""
 
@@ -74,6 +75,7 @@ AC_ARG_WITH(cfitsio, [AC_HELP_STRING([--with-cfitsio=<prefix>], [use CFITSIO ins
 
 if test x"$with_cfitsio" != x; then
    if test x"$with_cfitsio" != xno; then
+      CFITSIO_DIR="$with_cfitsio"
       CFITSIO_CPPFLAGS="-I$with_cfitsio/include"
       CFITSIO="-L$with_cfitsio/lib -lcfitsio"
    else
@@ -137,6 +139,7 @@ fi
 
 AC_SUBST(CFITSIO_CPPFLAGS)
 AC_SUBST(CFITSIO)
+AC_SUBST(CFITSIO_DIR)
 
 # Execute ACTION-IF-FOUND/ACTION-IF-NOT-FOUND:
    
