@@ -141,31 +141,23 @@ dnl +------------------------------------------------
 dnl | Check for MPI (C, C++, and Fortran)
 dnl +------------------------------------------------
 healpix_mpi=yes
+healpix_mpi_cc=no
+healpix_mpi_cxx=no
 healpix_mpi_fortran=no
 AC_ARG_ENABLE([mpi], [AC_HELP_STRING([--disable-mpi], [Disable all checks for MPI])], [healpix_mpi=$enable_mpi], [healpix_mpi=yes])
 if test $healpix_mpi = yes; then
-  ACX_MPI
-  if test x"$MPICXX" = x; then
-    healpix_mpi=no
-  else
-    AC_LANG_PUSH([C])
-    ACX_MPI
-    AC_LANG_POP([C])
-    if test x"$MPICC" = x; then
-      healpix_mpi=no
-    fi
-    if test $healpix_fortran = yes; then
-      AC_LANG_PUSH([Fortran])
-      ACX_MPI
-      AC_LANG_POP([Fortran])
-      if test x"$MPIFC" != x; then
-        healpix_mpi_fortran=yes
-      fi
-    fi
+  ACX_MPI([healpix_mpi_cxx=yes; AC_DEFINE(HAVE_MPICXX,1,[Define if you have MPICXX support.])])
+  AC_LANG_PUSH([C])
+  ACX_MPI([healpix_mpi_cc=yes; AC_DEFINE(HAVE_MPICC,1,[Define if you have MPICC support.])])
+  AC_LANG_POP([C])
+  if test $healpix_fortran = yes; then
+    AC_LANG_PUSH([Fortran])
+    ACX_MPI([healpix_mpi_fortran=yes; AC_DEFINE(HAVE_MPIFC,1,[Define if you have MPIFC support.])])
+    AC_LANG_POP([Fortran])
   fi
 fi
-AM_CONDITIONAL([HAVE_AM_MPI], [test healpix_mpi = yes])
-AM_CONDITIONAL([HAVE_AM_MPI_FC], [test healpix_mpi_fortran = yes])
+AM_CONDITIONAL([HAVE_AM_MPI], [test $healpix_mpi_cxx = yes])
+AM_CONDITIONAL([HAVE_AM_MPI_FC], [test $healpix_mpi_fortran = yes])
 
 dnl +-------------------------
 dnl | Option to perform full static linking of executables, not just
@@ -271,18 +263,10 @@ dnl +------------------------------------------------
 AC_MSG_NOTICE([                                           ])
 AC_MSG_NOTICE([============== Configuration ==============])
 AC_MSG_NOTICE([                                           ])
-if test x"$CC" = x; then
-  AC_MSG_NOTICE([  C Compiler         : Not found])
-else
-  AC_MSG_NOTICE([  C Compiler         : $CC])
-  AC_MSG_NOTICE([  C Compile flags    : $CFLAGS])
-fi
-if test x"$CXX" = x; then
-  AC_MSG_NOTICE([  C++ Compiler       : Not found])
-else
-  AC_MSG_NOTICE([  C++ Compiler       : $CXX])
-  AC_MSG_NOTICE([  C++ Compile flags  : $CXXFLAGS])
-fi
+AC_MSG_NOTICE([  C Compiler         : $CC])
+AC_MSG_NOTICE([  C Compile flags    : $CFLAGS])
+AC_MSG_NOTICE([  C++ Compiler       : $CXX])
+AC_MSG_NOTICE([  C++ Compile flags  : $CXXFLAGS])
 if test x"$FC" = x; then
   AC_MSG_NOTICE([  F90 Compiler       : Not found])
 else

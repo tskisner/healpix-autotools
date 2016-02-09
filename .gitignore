@@ -64,3 +64,5 @@ Makefile.in
 /src/f90/libhealpix/fits_d_inc.f90
 /src/f90/libhealpix/udgrade_s_inc.f90
 /src/f90/libhealpix/udgrade_d_inc.f90
+/src/f90/libhealpix-mpi/mpi_alm_tools_ss.f90
+/src/f90/libhealpix-mpi/mpi_alm_tools_dd.f90
