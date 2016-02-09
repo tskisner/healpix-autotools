@@ -7,7 +7,16 @@ endif
 
 SUBDIRS += \
 libhpxgif \
-alteralm 
+alteralm \
+anafast \
+hotspot \
+map2gif \
+median_filter \
+plmgen \
+process_mask \
+smoothing \
+synfast \
+ud_grade
 
-#anafast hotspot map2gif median_filter ngsims_full_sky plmgen process_mask smoothing synfast ud_grade
+#ngsims_full_sky
 

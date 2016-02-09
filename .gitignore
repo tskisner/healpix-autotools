@@ -68,3 +68,13 @@ Makefile.in
 /src/f90/libhealpix-mpi/mpi_alm_tools_dd.f90
 
 /src/f90/alteralm/alteralm
+/src/f90/anafast/anafast
+/src/f90/hotspot/hotspot
+/src/f90/map2gif/map2gif
+/src/f90/median_filter/median_filter
+/src/f90/plmgen/plmgen
+/src/f90/process_mask/process_mask
+/src/f90/smoothing/smoothing
+/src/f90/synfast/synfast
+/src/f90/ud_grade/ud_grade
+
