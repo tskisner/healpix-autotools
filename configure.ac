@@ -226,11 +226,8 @@ AC_CONFIG_FILES([src/f90/libsharp_f/Makefile])
 AC_CONFIG_FILES([src/f90/libhealpix/Makefile])
 AC_CONFIG_FILES([src/f90/libhealpix-mpi/Makefile])
 AC_CONFIG_FILES([src/f90/libhpxgif/Makefile])
+AC_CONFIG_FILES([src/f90/alteralm/Makefile])
 
-dnl 
-dnl 
-dnl 
-dnl AC_CONFIG_FILES([src/f90/alteralm/Makefile])
 dnl AC_CONFIG_FILES([src/f90/anafast/Makefile])
 dnl AC_CONFIG_FILES([src/f90/hotspot/Makefile])
 dnl AC_CONFIG_FILES([src/f90/map2gif/Makefile])

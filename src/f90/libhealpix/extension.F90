@@ -37,7 +37,7 @@ module extension
   ! written by Eric Hivon, Nov 2001
   !
   ! exit_with_status : verbose and clean exit, added by M.R.
-  ! 2005-08: edited for Gfortran
+  ! 2005-08: edited for __GFORTRAN__
   ! 2013-05-07: G95-compatible
   ! 2015-07-31: G95-compatible
   
@@ -49,7 +49,7 @@ module extension
   USE healpix_types, ONLY : I4B, I8B
   IMPLICIT none
 
-#if ((!defined(NAG)) && (!defined(GFORTRAN)))
+#if ((!defined(NAG)) && (!defined(__GFORTRAN__)))
 interface
   function iargc()
     integer iargc
@@ -81,7 +81,7 @@ end interface
 
   contains
 
-#if (defined (GFORTRAN))
+#if (defined (__GFORTRAN__))
 
     ! ===========================================================
     function iargc ()
