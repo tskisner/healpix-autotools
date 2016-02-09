@@ -6,7 +6,7 @@ endif
 
 SUBDIRS += idl
 
-#if HAVE_AM_PYTHON
-#  SUBDIRS += healpy
-#endif
+if HAVE_AM_PYTHON
+  SUBDIRS += healpy
+endif
 

@@ -1,0 +1,23 @@
+Metadata-Version: 1.1
+Name: healpy
+Version: 1.9.0
+Summary: Healpix tools package for Python
+Home-page: http://github.com/healpy
+Author: C. Rosset, A. Zonca
+Author-email: cyrille.rosset@apc.univ-paris-diderot.fr
+License: GPLv2
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)
+Classifier: Operating System :: POSIX
+Classifier: Programming Language :: C++
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Topic :: Scientific/Engineering :: Astronomy
+Classifier: Topic :: Scientific/Engineering :: Visualization
