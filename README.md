@@ -51,17 +51,33 @@ the software with
     ./configure --prefix=/path/to/install
 
 then you must add /path/to/install/bin to your PATH, /path/to/install/lib to 
-your LD_LIBRARY_PATH, and /path/to/install/lib/python<version>/site-packages to
+your LD_LIBRARY_PATH, and /path/to/install/lib/python[2,3].X/site-packages to
 your PYTHONPATH environment variables.
 
-In addition to specifying the install prefix, there are other options and
-environment variables that affect the configure script.  Run
+# Installing from a git checkout
+
+If you are installing directly from a git checkout (rather than a release 
+tarball), then you must have a fairly recent set of autoconf, automake, and 
+libtool installed on your system.  You must then do:
+
+    ./autogen.sh
+
+from the top-level directory.  Then follow the usual configure instructions
+below.
+
+# Installing from a Release Tarball
+
+If you download a release tarball, you do not need to have autotools installed.
+Simply extract the source and all the following commands assume you are in the
+top of the source tree.  The configure script has many options and environment
+variables that influence its behavior.  You can see these by doing:
 
     ./configure --help
 
-for a full list of these.  After running configure, make sure that the detected
-values of the compilers, compile flags, and enabled packages looks correct.  Now
-build the software with
+The most common option that you should almost always specify is the install
+prefix.  After running configure, make sure that the detected values of the 
+compilers, compile flags, and enabled packages looks correct.  Now build the 
+software with
 
     make
 
@@ -73,10 +89,11 @@ After installation, you can run some tests by doing
 
     make check
 
-If you only want the C and C++ HEALPix libraries, you can disable the Fortran
-and / or Python packages like this:
+If you only want the C and C++ HEALPix libraries, you can disable the Fortran,
+IDL, and / or Python packages like this:
 
-    ./configure --prefix=/path/to/install --disable-fortran --disable-python
+    ./configure --prefix=/path/to/install \
+    --disable-fortran --disable-python --disable-idl
 
 
 ### Using healpy with virtualenv or conda
@@ -87,7 +104,7 @@ like virtualenv or conda.  To install healpy in this situation, simply activate
 the environment first, and then install to it:
 
     source /path/to/env/bin/activate
-    ./configure --prefix=/path/to/env --disable-fortran
+    ./configure --prefix=/path/to/env --disable-fortran --disable-idl
     make install
 
 and then repeat that for each virtualenv / environment.
