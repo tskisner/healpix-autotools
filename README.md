@@ -54,7 +54,7 @@ then you must add /path/to/install/bin to your PATH, /path/to/install/lib to
 your LD_LIBRARY_PATH, and /path/to/install/lib/python[2,3].X/site-packages to
 your PYTHONPATH environment variables.
 
-# Installing from a git checkout
+### Installing from a git checkout
 
 If you are installing directly from a git checkout (rather than a release 
 tarball), then you must have a fairly recent set of autoconf, automake, and 
@@ -65,7 +65,7 @@ libtool installed on your system.  You must then do:
 from the top-level directory.  Then follow the usual configure instructions
 below.
 
-# Installing from a Release Tarball
+### Installing from a Release Tarball
 
 If you download a release tarball, you do not need to have autotools installed.
 Simply extract the source and all the following commands assume you are in the
