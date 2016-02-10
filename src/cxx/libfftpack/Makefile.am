@@ -1,4 +1,5 @@
 
+
 # Initialize compile and linking flags
 
 AM_CPPFLAGS = \
@@ -16,7 +17,9 @@ AM_LIBS =
 include $(top_srcdir)/src/build_options.am
 
 
-EXTRA_DIST = README
+EXTRA_DIST = \
+README \
+fftpack_inc.c
 
 noinst_HEADERS = fftpack.h bluestein.h
 include_HEADERS = ls_fft.h

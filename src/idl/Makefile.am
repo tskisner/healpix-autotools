@@ -15,7 +15,6 @@ zzz_external
 
 
 bin_SCRIPTS = hidl hidlde
-noinst_SCRIPTS = gen_launch.sh
 
 CLEANFILES = hidl hidlde
 

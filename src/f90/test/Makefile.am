@@ -46,7 +46,7 @@ wmap_lcdm_pl_model_yr1_v1.fits \
 wmap_lcdm_sz_lens_wmap5_cl_v3.fits \
 wmap_lcdm_sz_lens_wmap7_cl_v4.fits
 
-noinst_SCRIPTS = runtest.sh
+dist_noinst_SCRIPTS = runtest.sh
 
 TESTS = runtest.sh
 

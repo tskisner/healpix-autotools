@@ -11,7 +11,9 @@ PKG-INFO \
 setup.cfg.in \
 setup.py.in
 
-noinst_SCRIPTS = setup.py gen_setup.sh
+noinst_SCRIPTS = setup.py
+
+dist_noinst_SCRIPTS = gen_setup.sh
 
 CLEANFILES = setup.py setup.cfg
 

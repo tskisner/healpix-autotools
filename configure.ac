@@ -7,7 +7,7 @@ dnl | Initialize package info
 dnl +------------------------
 AC_INIT([HEALPix], [3.30], [work@theodorekisner.com], [healpix], [https://github.com/tskisner/healpix])
 AC_CONFIG_SRCDIR([Makefile.am])
-AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE([foreign tar-ustar])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -183,8 +183,10 @@ if test $healpix_static = yes; then
   healpix_python=no
 fi
 if test $healpix_python = yes; then
-  AM_PATH_PYTHON
-  ACX_PYTHON_DEV
+  AX_PYTHON
+fi
+if test x$PYTHON_BIN = x; then
+  healpix_python=no
 fi
 AC_LANG_POP([C])
 AM_CONDITIONAL([HAVE_AM_PYTHON], [test $healpix_python = yes])

@@ -30,7 +30,7 @@ alm2map_cxx.par.txt \
 anafast_cxx.par.txt \
 map2tga.par.txt \
 mult_alm.par.txt \
-smoothing.par.txt \
+smoothing_cxx.par.txt \
 syn_alm_cxx.par.txt
 
 

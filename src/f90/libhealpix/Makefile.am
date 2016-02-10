@@ -73,12 +73,10 @@ long_intrinsic.mod \
 mask_tools.mod
 
 EXTRA_DIST = \
-paramfile_io.F90.in \
-gen_paramfile_io.sh \
 gen_alm_code \
 gen_fits_code \
 gen_udgrade_code \
-alm_map_template.f90 \
+alm_map_template.F90 \
 fits_template.f90 \
 udgrade_template.f90 \
 convert_inplace_nd_inc.f90 \
