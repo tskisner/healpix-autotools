@@ -31,7 +31,7 @@ Current basis of this source is:
 Source changes from future releases will have to be merged by hand, so your
 patience is appreciated.
 
-## Documentation
+## User Documentation
 
 This project aims to make no changes to the public HEALPix API.  So you
 should consult the documentation for the original tools.  It is not included
@@ -39,6 +39,40 @@ here.  In addition to the original source tarball, documentation is also
 online here:
 
     http://healpix.sourceforge.net/documentation.php
+
+## Installation
+
+The installation of this healpix bundle is different from the original (that
+is the point).  Before installing, you should consciously plan where you intend
+to install the software.  You will likely need to set up your shell environment
+in order to make use of the installed software.  In particular, if you configure
+the software with
+
+    ./configure --prefix=/path/to/healpix
+
+then you must add /path/to/healpix/bin to your PATH, /path/to/healpix/lib to 
+your LD_LIBRARY_PATH, and /path/to/healpix/lib/python<version>/site-packages to
+your PYTHONPATH environment variables.
+
+In addition to specifying the install prefix, there are other options and
+environment variables that affect the configure script.  Run
+
+    ./configure --help
+
+for a full list of these.  After running configure, make sure that the detected
+values of the compilers, compile flags, and enabled packages looks correct.  Now
+build the software with
+
+    make
+
+and install the software with
+
+    make install
+
+After installation, you can run some tests by doing
+
+    make check
+
 
 
 
