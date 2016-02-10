@@ -1,4 +1,4 @@
-# HEALPix with an improved build system
+# HEALPix Built with Autotools
 
 This repo is mostly a mirror of the main healpix source code distribution, 
 found here:
@@ -48,10 +48,10 @@ to install the software.  You will likely need to set up your shell environment
 in order to make use of the installed software.  In particular, if you configure
 the software with
 
-    ./configure --prefix=/path/to/healpix
+    ./configure --prefix=/path/to/install
 
-then you must add /path/to/healpix/bin to your PATH, /path/to/healpix/lib to 
-your LD_LIBRARY_PATH, and /path/to/healpix/lib/python<version>/site-packages to
+then you must add /path/to/install/bin to your PATH, /path/to/install/lib to 
+your LD_LIBRARY_PATH, and /path/to/install/lib/python<version>/site-packages to
 your PYTHONPATH environment variables.
 
 In addition to specifying the install prefix, there are other options and
@@ -73,5 +73,22 @@ After installation, you can run some tests by doing
 
     make check
 
+If you only want the C and C++ HEALPix libraries, you can disable the Fortran
+and / or Python packages like this:
 
+    ./configure --prefix=/path/to/install --disable-fortran --disable-python
+
+
+### Using healpy with virtualenv or conda
+
+Unless you are only ever using a single version of python and a single set of 
+packages, it is great to manage all of your various python flavors with a tool
+like virtualenv or conda.  To install healpy in this situation, simply activate
+the environment first, and then install to it:
+
+    source /path/to/env/bin/activate
+    ./configure --prefix=/path/to/env --disable-fortran
+    make install
+
+and then repeat that for each virtualenv / environment.
 
