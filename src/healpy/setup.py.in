@@ -39,39 +39,19 @@ if get_config_var('MACOSX_DEPLOYMENT_TARGET') and not 'MACOSX_DEPLOYMENT_TARGET'
 # For ReadTheDocs, do not build the extensions, only install .py files
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
-cython_require = 'Cython >= 0.16'
-try:
-    if ('--help' in sys.argv[1:] or
-        sys.argv[1] in ('--help-commands', 'egg_info', 'clean', '--version')):
-        from distutils.command.build_ext import build_ext        
-        ext = "c"
-        extcpp = "cpp"
-    else:
-        pkg_resources.require(cython_require)
-        from Cython.Distutils import build_ext
-        ext = "pyx"
-        extcpp = "pyx"
-except:
-    # User does not have a sufficiently new version of Cython.
-    if os.path.exists('healpy/src/_query_disc.cpp'):
-        # This source package already contains the Cython-generated sources,
-        # so we can just use them.
-        from distutils.command.build_ext import build_ext
-        ext = "c"
-        extcpp = "cpp"
-    else:
-        # This source does not contain the Cython-generated sources, so fail.
-        raise DistutilsExecError('''
+if os.path.exists('healpy/src/_query_disc.cpp'):
+    # This source package already contains the Cython-generated sources,
+    # so we can just use them.
+    from distutils.command.build_ext import build_ext
+    ext = "c"
+    extcpp = "cpp"
+else:
+    # This source does not contain the Cython-generated sources, so fail.
+    raise DistutilsExecError('''
 
-It looks like you are attempting to build from the Healpy development
-sources, i.e., from GitHub. You need {0} to build Healpy from
-development sources.
+This version of healpy should always contain the Cython-generated sources.
 
-Either install Healpy from an official stable release from:
-    https://pypi.python.org/pypi/healpy
-
-OR, to build from development sources, first get {0} from:
-    https://pypi.python.org/pypi/Cython'''.format(cython_require))
+Something is badly broken with your source tree!''')
   
 if on_rtd:
     numpy_inc = ''

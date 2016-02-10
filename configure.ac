@@ -5,7 +5,7 @@ dnl
 dnl +------------------------
 dnl | Initialize package info
 dnl +------------------------
-AC_INIT([HEALPix], [3.30], [work@theodorekisner.com], [healpix-autotools], [https://github.com/tskisner/healpix])
+AC_INIT([HEALPix], [3.30.0], [work@theodorekisner.com], [healpix-autotools], [https://github.com/tskisner/healpix])
 AC_CONFIG_SRCDIR([Makefile.am])
 AM_INIT_AUTOMAKE([foreign tar-ustar])
 AC_CONFIG_HEADERS(config.h)
@@ -190,6 +190,12 @@ if test x$PYTHON_BIN = x; then
 fi
 AC_LANG_POP([C])
 AM_CONDITIONAL([HAVE_AM_PYTHON], [test $healpix_python = yes])
+
+dnl +------------------------------------------------
+dnl | Fix libtool trying to be too smart
+dnl +------------------------------------------------
+postdeps_FC=$(echo $postdeps_FC | sed 's/-l //g')
+echo "postdeps_FC=$postdeps_FC"
 
 dnl +------------------------------------------------
 dnl | Makefiles to generate
