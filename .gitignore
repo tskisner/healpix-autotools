@@ -139,3 +139,10 @@ test-suite.log
 
 /src/idl/hidl
 /src/idl/hidlde
+
+/src/healpy/build/
+/src/healpy/dist/
+/src/healpy/healpy.egg-info/
+/src/healpy/setup.cfg
+/src/healpy/setup.py
+
