@@ -1,5 +1,5 @@
 
-healpixextradir = $(datadir)/@PACKAGE@
+healpixextradir = $(datadir)/healpix
 
 healpixextra_DATA = pixel_window_n0002.fits \
                     pixel_window_n0004.fits \
