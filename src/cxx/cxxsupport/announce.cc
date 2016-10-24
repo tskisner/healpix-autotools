@@ -79,7 +79,7 @@ void announce (const string &name)
 #ifndef VERSION
 #define VERSION "?.?"
 #endif
-  string version ="3.30";
+  string version ="3.31";
   string name2 = name+" "+version;
   cout << endl << "+-";
   for (tsize m=0; m<name2.length(); ++m) cout << "-";
