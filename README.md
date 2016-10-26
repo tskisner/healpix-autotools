@@ -26,7 +26,7 @@ other work used to streamline that process.
 
 Current basis of this source is:
 
-    Healpix_3.30_2015Oct08.tar.gz    md5 = 5c51820dbdc9e2295e319587ad883ac7
+    Healpix_3.31_2016Aug26.tar.gz    md5 = c0dc75e57f237b634fec97df55997918
 
 Source changes from future releases will have to be merged by hand, so your
 patience is appreciated.
