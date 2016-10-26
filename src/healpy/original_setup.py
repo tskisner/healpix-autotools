@@ -401,6 +401,18 @@ class custom_build_ext(build_ext):
         self.include_dirs.append(numpy.get_include())
 
     def run(self):
+        # If we were asked to build any C/C++ libraries, add the directory
+        # where we built them to the include path. (It's already on the library
+        # path.)
+        if self.distribution.has_c_libraries():
+            self.run_command('build_clib')
+            build_clib = self.get_finalized_command('build_clib')
+            for key, value in build_clib.build_args.items():
+                for ext in self.extensions:
+                    if not hasattr(ext, key) or getattr(ext, key) is None:
+                        setattr(ext, key, value)
+                    else:
+                        getattr(ext, key).extend(value)
         build_ext.run(self)
 
 
@@ -451,52 +463,44 @@ setup(name='healpy',
       author_email='cyrille.rosset@apc.univ-paris-diderot.fr',
       url='http://github.com/healpy',
       packages=['healpy','healpy.test'],
+      libraries=[
+          ('cfitsio', {
+           'pkg_config_name': 'cfitsio',
+           'local_source': 'cfitsio',
+           'supports_non_srcdir_builds': False}),
+          ('healpix_cxx', {
+           'pkg_config_name': 'healpix_cxx >= 3.30.0',
+           'local_source': 'healpixsubmodule/src/cxx/autotools'})
+      ],
       py_modules=['healpy.pixelfunc','healpy.sphtfunc',
                   'healpy.visufunc','healpy.fitsfunc',
                   'healpy.projector','healpy.rotator',
                   'healpy.projaxes','healpy.version'],
       cmdclass={
           'build_ext': custom_build_ext,
+          'build_clib': build_external_clib,
           'test': PyTest
       },
       ext_modules=[
           Extension('healpy._healpy_pixel_lib',
                     sources=['healpy/src/_healpy_pixel_lib.cc'],
-                    include_dirs=[@INCDIR@],
-                    libraries=['healpix_cxx', 'cfitsio', 'm'],
-                    extra_link_args=[@EXTRA@],
                     language='c++'),
           Extension('healpy._healpy_sph_transform_lib',
                     sources=['healpy/src/_healpy_sph_transform_lib.cc'],
-                    include_dirs=[@INCDIR@],
-                    libraries=['healpix_cxx', 'cfitsio', 'm'],
-                    extra_link_args=[@EXTRA@],
                     language='c++'),
           Extension('healpy._healpy_fitsio_lib',
                     sources=['healpy/src/_healpy_fitsio_lib.cc'],
-                    include_dirs=[@INCDIR@],
-                    libraries=['healpix_cxx', 'cfitsio', 'm'],
-                    extra_link_args=[@EXTRA@],
                     language='c++'),
           Extension("healpy._query_disc",
                     ['healpy/src/_query_disc.pyx'],
-                    include_dirs=[@INCDIR@],
-                    libraries=['healpix_cxx', 'cfitsio', 'm'],
-                    extra_link_args=[@EXTRA@],
                     language='c++',
                     cython_directives=dict(embedsignature=True)),
           Extension("healpy._sphtools",
                     ['healpy/src/_sphtools.pyx'],
-                    include_dirs=[@INCDIR@],
-                    libraries=['healpix_cxx', 'cfitsio', 'm'],
-                    extra_link_args=[@EXTRA@],
                     language='c++',
                     cython_directives=dict(embedsignature=True)),
           Extension("healpy._pixelfunc",
                     ['healpy/src/_pixelfunc.pyx'],
-                    include_dirs=[@INCDIR@],
-                    libraries=['healpix_cxx', 'cfitsio', 'm'],
-                    extra_link_args=[@EXTRA@],
                     language='c++',
                     cython_directives=dict(embedsignature=True))
       ],

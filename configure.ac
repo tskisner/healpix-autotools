@@ -5,7 +5,7 @@ dnl
 dnl +------------------------
 dnl | Initialize package info
 dnl +------------------------
-AC_INIT([HEALPix], [3.30.2], [work@theodorekisner.com], [healpix-autotools], [https://github.com/tskisner/healpix])
+AC_INIT([HEALPix], [3.31.0], [work@theodorekisner.com], [healpix-autotools], [https://github.com/tskisner/healpix-autotools])
 AC_CONFIG_SRCDIR([Makefile.am])
 AM_INIT_AUTOMAKE([foreign tar-ustar])
 AC_CONFIG_HEADERS(config.h)
@@ -19,7 +19,7 @@ dnl | current, and set revision to 0.  If any interfaces have been added
 dnl | since the last public release, then increment age.  If any interfaces 
 dnl | have been removed since the last public release, then set age to 0.
 dnl +-------------------------
-HEALPIX_LT_VERSION="1:0:0"
+HEALPIX_LT_VERSION="1:1:0"
 AC_SUBST(HEALPIX_LT_VERSION)
 
 dnl +---------------------

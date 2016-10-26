@@ -29,5 +29,5 @@ install-exec-hook :
 	@$(PYTHON_BIN) setup.py install
 
 clean-local :
-	rm -rf build dist healpy.egg-info
+	rm -rf build dist healpy.egg-info PKG-INFO
 
