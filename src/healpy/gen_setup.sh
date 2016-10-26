@@ -13,11 +13,17 @@ echo "" >> setup.cfg
 
 # now, substitute the extra_link_args, based on the installed location
 # of healpix_cxx, as well as the CFITSIO location passed to configure.
+# Do the same with the include dirs.
 
 extra="\"-L${LIB}\""
 if [ "x${CFITS}" != "x" ]; then
     extra="${extra}, \"-L${CFITS}/lib\""
 fi
 
-sed -e "s#@EXTRA@#${extra}#g" setup.py.in > setup.py
+incdir="\"${PRE}/include\""
+if [ "x${CFITS}" != "x" ]; then
+    incdir="${incdir}, \"${CFITS}/include\""
+fi
+
+sed -e "s#@EXTRA@#${extra}#g" -e "s#@INCDIR@#${incdir}#g" setup.py.in > setup.py
 
