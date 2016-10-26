@@ -7,7 +7,8 @@ CITATION \
 COPYING \
 INSTALL.rst \
 MANIFEST.in \
-PKG-INFO \
+README.rst \
+requirements.txt \
 setup.cfg.in \
 setup.py.in
 
@@ -29,5 +30,5 @@ install-exec-hook :
 	@$(PYTHON_BIN) setup.py install
 
 clean-local :
-	rm -rf build dist healpy.egg-info PKG-INFO
+	rm -rf build dist healpy.egg-info
 
