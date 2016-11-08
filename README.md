@@ -5,6 +5,10 @@ found here:
 
     http://sourceforge.net/projects/healpix/
 
+and the latest healpy release from here:
+
+    https://github.com/healpy/healpy/releases
+
 but with small modifications that allow the software to be more easily
 installed.  Due to historical reasons beyond the scope of this document, the
 different language flavors contained within healpix were developed separately
@@ -27,6 +31,7 @@ other work used to streamline that process.
 Current basis of this source is:
 
     Healpix_3.31_2016Aug26.tar.gz    md5 = c0dc75e57f237b634fec97df55997918
+    healpy-1.10.1.tar.gz             md5 = ee8750957a6fdfdafbef54e54788ec9b
 
 Source changes from future releases will have to be merged by hand, so your
 patience is appreciated.
