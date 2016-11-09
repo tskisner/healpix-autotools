@@ -183,9 +183,9 @@ if test $healpix_static = yes; then
   healpix_python=no
 fi
 if test $healpix_python = yes; then
-  AX_PYTHON
+  AM_PATH_PYTHON
 fi
-if test x$PYTHON_BIN = x; then
+if test x$PYTHON = x; then
   healpix_python=no
 fi
 AC_LANG_POP([C])
