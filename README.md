@@ -31,7 +31,7 @@ other work used to streamline that process.
 Current basis of this source is:
 
     Healpix_3.31_2016Aug26.tar.gz    md5 = c0dc75e57f237b634fec97df55997918
-    healpy-1.10.1.tar.gz             md5 = ee8750957a6fdfdafbef54e54788ec9b
+    healpy-1.10.3.tar.gz             md5 = 6491777d1bcbd36d356551bf240d3a2f
 
 Source changes from future releases will have to be merged by hand, so your
 patience is appreciated.
