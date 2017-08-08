@@ -28,7 +28,8 @@ setup.py : $(srcdir)/setup.py.in $(srcdir)/setup.cfg.in $(srcdir)/gen_setup.sh
 
 install-exec-hook :
 	mkdir -p "$(pythondir)"
-	@$(PYTHON) setup.py install
+	@$(PYTHON) setup.py install \
+	--single-version-externally-managed --record record.txt
 
 clean-local :
 	rm -rf build dist healpy.egg-info
