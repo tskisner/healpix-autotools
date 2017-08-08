@@ -5,7 +5,7 @@ dnl
 dnl +------------------------
 dnl | Initialize package info
 dnl +------------------------
-AC_INIT([HEALPix], [3.31.2], [work@theodorekisner.com], [healpix-autotools], [https://github.com/tskisner/healpix-autotools])
+AC_INIT([HEALPix], [3.31.3], [work@theodorekisner.com], [healpix-autotools], [https://github.com/tskisner/healpix-autotools])
 AC_CONFIG_SRCDIR([Makefile.am])
 AM_INIT_AUTOMAKE([foreign tar-ustar])
 AC_CONFIG_HEADERS(config.h)
