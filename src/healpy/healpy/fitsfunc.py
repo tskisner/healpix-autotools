@@ -19,14 +19,9 @@
 #
 """Provides input and output functions for Healpix maps, alm, and cl.
 """
-from __future__ import with_statement
 from __future__ import division
 
 import six
-import gzip
-import tempfile
-import shutil
-import os
 import warnings
 import astropy.io.fits as pf
 import numpy as np
@@ -45,29 +40,8 @@ standard_column_names = {
 class HealpixFitsWarning(Warning):
     pass
 
-def writeto(tbhdu, filename):
-    # FIXME: Pyfits versions earlier than 3.1.2 had no support or flaky support
-    # for writing to .gz files or GzipFile objects. Drop this code when
-    # we decide to drop support for older versions of Pyfits or if we decide
-    # to support only Astropy.
-    if isinstance(filename, six.string_types) and filename.endswith('.gz'):
-        basefilename, ext = os.path.splitext(filename)
-        with tempfile.NamedTemporaryFile(suffix='.fits') as tmpfile:
-            tbhdu.writeto(tmpfile.name, clobber=True)
-            gzfile = gzip.open(filename, 'wb')
-            try:
-                try:
-                    shutil.copyfileobj(tmpfile, gzfile)
-                finally:
-                    gzfile.close()
-            except:
-                os.unlink(gzfile.name)
-                raise
-    else:
-        tbhdu.writeto(filename, clobber=True)
-
 def read_cl(filename, dtype=np.float64, h=False):
-    """Reads Cl from an healpix file, as IDL fits2cl.
+    """Reads Cl from a healpix file, as IDL fits2cl.
 
     Parameters
     ----------
@@ -82,41 +56,47 @@ def read_cl(filename, dtype=np.float64, h=False):
       the cl array
     """
     fits_hdu = _get_hdu(filename, hdu=1)
-    cl = [fits_hdu.data.field(n) for n in range(len(fits_hdu.columns))]
+    cl = np.array([fits_hdu.data.field(n) for n in range(len(fits_hdu.columns))])
     if len(cl) == 1:
         return cl[0]
     else:
         return cl
 
-def write_cl(filename, cl, dtype=np.float64):
-    """Writes Cl into an healpix file, as IDL cl2fits.
+def write_cl(filename, cl, dtype=np.float64, overwrite=False):
+    """Writes Cl into a healpix file, as IDL cl2fits.
 
     Parameters
     ----------
     filename : str
       the fits file name
     cl : array
-      the cl array to write to file, currently TT only
+      the cl array to write to file
+    overwrite : bool, optional
+      If True, existing file is silently overwritten. Otherwise trying to write
+      an existing file raises an OSError (IOError for Python 2).
     """
     # check the dtype and convert it
     fitsformat = getformat(dtype)
     column_names = ['TEMPERATURE','GRADIENT','CURL','G-T','C-T','C-G']
-    if isinstance(cl, list):
+    if len(np.shape(cl)) == 2:
         cols = [pf.Column(name=column_name,
                                format='%s'%fitsformat,
                                array=column_cl) for column_name, column_cl in zip(column_names[:len(cl)], cl)]
-    else: # we write only one TT
+    elif len(np.shape(cl)) == 1:
+        # we write only TT
         cols = [pf.Column(name='TEMPERATURE',
                                format='%s'%fitsformat,
                                array=cl)]
+    else:
+        raise RuntimeError('write_cl: Expected one or more vectors of equal length')
 
     tbhdu = pf.BinTableHDU.from_columns(cols)
     # add needed keywords
     tbhdu.header['CREATOR'] = 'healpy'
-    writeto(tbhdu, filename)
+    tbhdu.writeto(filename, overwrite=overwrite)
 
-def write_map(filename,m,nest=False,dtype=np.float32,fits_IDL=True,coord=None,partial=False,column_names=None,column_units=None,extra_header=()):
-    """Writes an healpix map into an healpix file.
+def write_map(filename,m,nest=False,dtype=np.float32,fits_IDL=True,coord=None,partial=False,column_names=None,column_units=None,extra_header=(),overwrite=False):
+    """Writes a healpix map into a healpix file.
 
     Parameters
     ----------
@@ -152,8 +132,11 @@ def write_map(filename,m,nest=False,dtype=np.float32,fits_IDL=True,coord=None,pa
     dtype: np.dtype or list of np.dtypes, optional
       The datatype in which the columns will be stored. Will be converted
       internally from the numpy datatype to the fits convention. If a list,
-      the length must correspond to the number of map arrays. 
+      the length must correspond to the number of map arrays.
       Default: np.float32.
+    overwrite : bool, optional
+      If True, existing file is silently overwritten. Otherwise trying to write
+      an existing file raises an OSError (IOError for Python 2).
     """
     if not hasattr(m, '__len__'):
         raise TypeError('The map must be a sequence')
@@ -202,7 +185,7 @@ def write_map(filename,m,nest=False,dtype=np.float32,fits_IDL=True,coord=None,pa
                               array=pix,
                               unit=None))
 
-    for cn, cu, mm, curr_fitsformat in zip(column_names, column_units, m, 
+    for cn, cu, mm, curr_fitsformat in zip(column_names, column_units, m,
                                            fitsformat):
         if len(mm) > 1024 and fits_IDL:
             # I need an ndarray, for reshape:
@@ -245,12 +228,12 @@ def write_map(filename,m,nest=False,dtype=np.float32,fits_IDL=True,coord=None,pa
     for args in extra_header:
         tbhdu.header[args[0]] = args[1:]
 
-    writeto(tbhdu, filename)
+    tbhdu.writeto(filename, overwrite=overwrite)
 
 
 def read_map(filename,field=0,dtype=np.float64,nest=False,partial=False,hdu=1,h=False,
              verbose=True,memmap=False):
-    """Read an healpix map from a fits file.  Partial-sky files,
+    """Read a healpix map from a fits file.  Partial-sky files,
     if properly identified, are expanded to full size and filled with UNSEEN.
 
     Parameters
@@ -265,7 +248,7 @@ def read_map(filename,field=0,dtype=np.float64,nest=False,partial=False,hdu=1,h=
       first column after the pixel index column.
       If None, all columns are read in.
     dtype : data type or list of data types, optional
-      Force the conversion to some type. Passing a list allows different 
+      Force the conversion to some type. Passing a list allows different
       types for each field. In that case, the length of the list must
       correspond to the length of the field parameter. Default: np.float64
     nest : bool, optional
@@ -353,12 +336,12 @@ def read_map(filename,field=0,dtype=np.float64,nest=False,partial=False,hdu=1,h=
         # increment field counters
         field = tuple(f if isinstance(f, str) else f+1 for f in field)
         try:
-            pix = fits_hdu.data.field(0).astype(int).ravel()
+            pix = fits_hdu.data.field(0).astype(int,copy=False).ravel()
         except pf.VerifyError as e:
             print(e)
             print("Trying to fix a badly formatted header")
             fits_hdu.verify("fix")
-            pix = fits_hdu.data.field(0).astype(int).ravel()
+            pix = fits_hdu.data.field(0).astype(int,copy=False).ravel()
 
     try:
         assert len(dtype) == len(field), "The number of dtypes are not equal to the number of fields"
@@ -367,12 +350,12 @@ def read_map(filename,field=0,dtype=np.float64,nest=False,partial=False,hdu=1,h=
 
     for ff, curr_dtype in zip(field, dtype):
         try:
-            m=fits_hdu.data.field(ff).astype(curr_dtype).ravel()
+            m=fits_hdu.data.field(ff).astype(curr_dtype,copy=False).ravel()
         except pf.VerifyError as e:
             print(e)
             print("Trying to fix a badly formatted header")
             m=fits_hdu.verify("fix")
-            m=fits_hdu.data.field(ff).astype(curr_dtype).ravel()
+            m=fits_hdu.data.field(ff).astype(curr_dtype,copy=False).ravel()
 
         if partial:
             mnew = UNSEEN * np.ones(sz, dtype=curr_dtype)
@@ -397,20 +380,26 @@ def read_map(filename,field=0,dtype=np.float64,nest=False,partial=False,hdu=1,h=
             pass
         ret.append(m)
 
+    if h:
+        header = []
+        for (key, value) in fits_hdu.header.items():
+            header.append((key, value))
+
     if len(ret) == 1:
         if h:
-            return ret[0],fits_hdu.header.items()
+            return ret[0], header
         else:
             return ret[0]
     else:
+        if all(dt == dtype[0] for dt in dtype):
+            ret = np.array(ret)
         if h:
-            ret.append(fits_hdu.header.items())
-            return tuple(ret)
+            return ret, header
         else:
-            return tuple(ret)
+            return ret
 
 
-def write_alm(filename,alms,out_dtype=None,lmax=-1,mmax=-1,mmax_in=-1):
+def write_alm(filename,alms,out_dtype=None,lmax=-1,mmax=-1,mmax_in=-1,overwrite=False):
     """Write alms to a fits file.
 
     In the fits file the alms are written
@@ -480,7 +469,7 @@ def write_alm(filename,alms,out_dtype=None,lmax=-1,mmax=-1,mmax_in=-1):
 
         tbhdu = pf.BinTableHDU.from_columns([cindex,creal,cimag])
         hdulist.append(tbhdu)
-    writeto(hdulist, filename)
+    hdulist.writeto(filename, overwrite=overwrite)
 
 def read_alm(filename,hdu=1,return_mmax=False):
     """Read alm from a fits file.
@@ -494,7 +483,7 @@ def read_alm(filename,hdu=1,return_mmax=False):
     ----------
     filename : str or HDUList or HDU
       The name of the fits file to read
-    hdu : int, optional
+    hdu : int, or tuple of int, optional
       The header to read. Start at 0. Default: hdu=1
     return_mmax : bool, optional
       If true, both the alms and mmax is returned in a tuple. Default: return_mmax=False
@@ -504,17 +493,34 @@ def read_alm(filename,hdu=1,return_mmax=False):
     alms[, mmax] : complex array or tuple of a complex array and an int
       The alms read from the file and optionally mmax read from the file
     """
-    idx, almr, almi = mrdfits(filename,hdu=hdu)
-    l = np.floor(np.sqrt(idx-1)).astype(np.long)
-    m = idx - l**2 - l - 1
-    if (m<0).any():
-        raise ValueError('Negative m value encountered !')
-    lmax = l.max()
-    mmax = m.max()
-    alm = almr*(0+0j)
-    i = Alm.getidx(lmax,l,m)
-    alm.real[i] = almr
-    alm.imag[i] = almi
+    alms = []
+    lmaxtot = None
+    mmaxtot = None
+    for unit in np.atleast_1d(hdu):
+        idx, almr, almi = mrdfits(filename,hdu=unit)
+        l = np.floor(np.sqrt(idx-1)).astype(np.long)
+        m = idx - l**2 - l - 1
+        if (m<0).any():
+            raise ValueError('Negative m value encountered !')
+        lmax = l.max()
+        mmax = m.max()
+        if lmaxtot is None:
+            lmaxtot = lmax
+            mmaxtot = mmax
+        else:
+            if lmaxtot != lmax or mmaxtot != mmax:
+                raise RuntimeError(
+                    'read_alm: harmonic expansion order in {} HDUs {} does not '
+                    'match'.format(filename, unit, hdu))
+        alm = almr*(0+0j)
+        i = Alm.getidx(lmax,l,m)
+        alm.real[i] = almr
+        alm.imag[i] = almi
+        alms.append(alm)
+    if len(alms) == 1:
+        alm = alms[0]
+    else:
+        alm = np.array(alms)
     if return_mmax:
         return alm, mmax
     else:
@@ -609,7 +615,7 @@ def mwrfits(filename,data,hdu=1,colnames=None,keys=None):
         for k,v in keys.items():
             tbhdu.header[k] = v
     # write the file
-    writeto(tbhdu, filename)
+    tbhdu.writeto(filename)
 
 def getformat(t):
     """Get the FITS convention format string of data type t.

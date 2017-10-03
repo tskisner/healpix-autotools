@@ -19,7 +19,6 @@ from distutils.sysconfig import get_config_var, get_config_vars
 from subprocess import check_output, CalledProcessError, check_call
 from setuptools import setup
 from setuptools.dist import Distribution
-from setuptools.command.test import test as TestCommand
 from distutils.command.build_clib import build_clib
 from distutils.errors import DistutilsExecError
 from distutils.dir_util import mkpath
@@ -61,6 +60,11 @@ else:
     log.info('%s is installed; using Cython')
     from Cython.Distutils import build_ext, Extension
 
+def set_builtin(name, value):
+    if isinstance(__builtins__, dict):
+        __builtins__[name] = value
+    else:
+        setattr(__builtins__, name, value)
 
 class build_external_clib(build_clib):
     """Subclass of Distutils' standard build_clib subcommand. Adds support for
@@ -350,7 +354,7 @@ class custom_build_ext(build_ext):
         self.distribution.fetch_build_eggs('numpy')
         # Prevent numpy from thinking it is still in its setup process:
         # See http://stackoverflow.com/questions/19919905
-        __builtins__.__NUMPY_SETUP__ = False
+        set_builtin('__NUMPY_SETUP__', False)
 
         # Add Numpy header search path path
         import numpy
@@ -372,19 +376,6 @@ class custom_build_ext(build_ext):
         build_ext.run(self)
 
 
-class PyTest(TestCommand):
-    """Custom Setuptools test command to run doctests with py.test. Based on
-    http://pytest.org/latest/goodpractises.html#integration-with-setuptools-test-commands"""
-
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args.insert(0, '--doctest-modules')
-
-    def run_tests(self):
-        import pytest
-        sys.exit(pytest.main(self.test_args))
-
-
 exec(open('healpy/version.py').read())
 
 
@@ -399,10 +390,9 @@ setup(name='healpy',
           'Operating System :: POSIX',
           'Programming Language :: C++',
           'Programming Language :: Python :: 2.7',
-          'Programming Language :: Python :: 3.2',
-          'Programming Language :: Python :: 3.3',
           'Programming Language :: Python :: 3.4',
           'Programming Language :: Python :: 3.5',
+          'Programming Language :: Python :: 3.6',
           'Topic :: Scientific/Engineering :: Astronomy',
           'Topic :: Scientific/Engineering :: Visualization'
       ],
@@ -425,8 +415,7 @@ setup(name='healpy',
                   'healpy.projaxes','healpy.version'],
       cmdclass={
           'build_ext': custom_build_ext,
-          'build_clib': build_external_clib,
-          'test': PyTest
+          'build_clib': build_external_clib
       },
       ext_modules=[
           Extension('healpy._healpy_pixel_lib',
@@ -434,9 +423,6 @@ setup(name='healpy',
                     language='c++'),
           Extension('healpy._healpy_sph_transform_lib',
                     sources=['healpy/src/_healpy_sph_transform_lib.cc'],
-                    language='c++'),
-          Extension('healpy._healpy_fitsio_lib',
-                    sources=['healpy/src/_healpy_fitsio_lib.cc'],
                     language='c++'),
           Extension("healpy._query_disc",
                     ['healpy/src/_query_disc.pyx'],
@@ -453,7 +439,8 @@ setup(name='healpy',
       ],
       package_data = {'healpy': ['data/*.fits', 'data/totcls.dat', 'test/data/*.fits', 'test/data/*.sh']},
       install_requires=['matplotlib', 'numpy', 'six', 'astropy'],
-      tests_require=['pytest'],
+      setup_requires=['pytest-runner'],
+      tests_require=['pytest', 'pytest-cython'],
       test_suite='healpy',
       license='GPLv2'
       )

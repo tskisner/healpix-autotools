@@ -1,20 +1,20 @@
-# 
+#
 #  This file is part of Healpy.
-# 
+#
 #  Healpy is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation; either version 2 of the License, or
 #  (at your option) any later version.
-# 
+#
 #  Healpy is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
-# 
+#
 #  You should have received a copy of the GNU General Public License
 #  along with Healpy; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-# 
+#
 #  For more information about Healpy, see http://code.google.com/p/healpy
 #
 """
@@ -30,7 +30,7 @@ conversion from/to sky coordinates
 - :func:`pix2ang` converts pixel number to angular coordinates
 - :func:`pix2vec` converts pixel number to unit 3-vector direction
 - :func:`ang2pix` converts angular coordinates to pixel number
-- :func:`vec2pix` converts 3-vector to pixel number 
+- :func:`vec2pix` converts 3-vector to pixel number
 - :func:`vec2ang` converts 3-vector to angular coordinates
 - :func:`ang2vec` converts angular coordinates to unit 3-vector
 - :func:`pix2xyf` converts pixel number to coordinates within face
@@ -110,7 +110,7 @@ max_nside = 1 << 29
 
 __all__ = ['pix2ang', 'pix2vec', 'ang2pix', 'vec2pix',
            'ang2vec', 'vec2ang',
-           'get_interp_weights', 'get_neighbours', 'get_interp_val', 'get_all_neighbours',
+           'get_interp_weights', 'get_interp_val', 'get_all_neighbours',
            'max_pixrad',
            'nest2ring', 'ring2nest', 'reorder', 'ud_grade',
            'UNSEEN', 'mask_good', 'mask_bad', 'ma',
@@ -233,7 +233,7 @@ def ma_to_array(m):
         return m.filled()
     except AttributeError:
         try:
-            return tuple([mm.filled() for mm in m])
+            return np.array([mm.filled() for mm in m])
         except AttributeError:
             pass
     return m
@@ -356,7 +356,7 @@ def ma(m, badval = UNSEEN, rtol = 1e-5, atol = 1e-8, copy = True):
 
     Returns
     -------
-    a masked array with the same shape as the input map, 
+    a masked array with the same shape as the input map,
     masked where input map is close to badval.
 
     See Also
@@ -374,10 +374,7 @@ def ma(m, badval = UNSEEN, rtol = 1e-5, atol = 1e-8, copy = True):
            fill_value = -1.6375e+30)
     <BLANKLINE>
     """
-    if maptype(m) == 0:
-        return np.ma.masked_values(m, badval, rtol = rtol, atol = atol, copy = copy)
-    else:
-        return tuple([ma(mm) for mm in m])
+    return np.ma.masked_values(np.array(m), badval, rtol = rtol, atol = atol, copy = copy)
 
 def ang2pix(nside,theta,phi,nest=False,lonlat=False):
     """ang2pix : nside,theta[rad],phi[rad],nest=False,lonlat=False -> ipix (default:RING)
@@ -425,7 +422,7 @@ def ang2pix(nside,theta,phi,nest=False,lonlat=False):
     if lonlat:
         theta,phi = lonlat2thetaphi(theta,phi)
     check_theta_valid(theta)
-    check_nside(nside)
+    check_nside(nside, nest=nest)
     if nest:
         return pixlib._ang2pix_nest(nside,theta,phi)
     else:
@@ -471,7 +468,7 @@ def pix2ang(nside,ipix,nest=False,lonlat=False):
     >>> hp.pix2ang([1, 2, 4, 8], 11, lonlat=True)
     (array([ 315. ,  337.5,  337.5,  337.5]), array([-41.8103149 ,  41.8103149 ,  66.44353569,  78.28414761]))
     """
-    check_nside(nside)
+    check_nside(nside, nest=nest)
     if nest:
         theta,phi = pixlib._pix2ang_nest(nside, ipix)
     else:
@@ -515,7 +512,7 @@ def xyf2pix(nside,x,y,face,nest=False):
     >>> hp.xyf2pix(16, [8, 8, 8, 15, 0], [8, 8, 7, 15, 0], [4, 0, 5, 0, 8])
     array([1440,  427, 1520,    0, 3068])
     """
-    check_nside(nside)
+    check_nside(nside, nest=nest)
     if nest:
         return pixlib._xyf2pix_nest(nside,x,y,face)
     else:
@@ -556,7 +553,7 @@ def pix2xyf(nside,ipix,nest=False):
     >>> hp.pix2xyf([1, 2, 4, 8], 11)
     (array([0, 1, 3, 7]), array([0, 0, 2, 6]), array([11,  3,  3,  3]))
     """
-    check_nside(nside)
+    check_nside(nside, nest=nest)
     if nest:
         return pixlib._pix2xyf_nest(nside, ipix)
     else:
@@ -635,7 +632,7 @@ def pix2vec(nside,ipix,nest=False):
     >>> hp.pix2vec([1, 2], 11)
     (array([ 0.52704628,  0.68861915]), array([-0.52704628, -0.28523539]), array([-0.66666667,  0.66666667]))
     """
-    check_nside(nside)
+    check_nside(nside, nest=nest)
     if nest:
         return pixlib._pix2vec_nest(nside,ipix)
     else:
@@ -647,9 +644,9 @@ def ang2vec(theta, phi, lonlat=False):
     Parameters
     ----------
     theta : float, scalar or arry-like
-      colatitude in radians measured southward from north pole (in [0,pi]). 
+      colatitude in radians measured southward from north pole (in [0,pi]).
     phi : float, scalar or array-like
-      longitude in radians measured eastward (in [0, 2*pi]). 
+      longitude in radians measured eastward (in [0, 2*pi]).
     lonlat : bool
       If True, input angles are assumed to be longitude and latitude in degree,
       otherwise, they are co-latitude and longitude in radians.
@@ -720,7 +717,7 @@ def ring2nest(nside, ipix):
     See Also
     --------
     nest2ring, reorder
-    
+
     Examples
     --------
     >>> import healpy as hp
@@ -729,11 +726,11 @@ def ring2nest(nside, ipix):
 
     >>> hp.ring2nest(2, np.arange(10))
     array([ 3,  7, 11, 15,  2,  1,  6,  5, 10,  9])
-    
+
     >>> hp.ring2nest([1, 2, 4, 8], 11)
     array([ 11,  13,  61, 253])
     """
-    check_nside(nside)
+    check_nside(nside, nest=True)
     return pixlib._ring2nest(nside, ipix)
 
 def nest2ring(nside, ipix):
@@ -754,7 +751,7 @@ def nest2ring(nside, ipix):
     See Also
     --------
     ring2nest, reorder
-    
+
     Examples
     --------
     >>> import healpy as hp
@@ -763,16 +760,16 @@ def nest2ring(nside, ipix):
 
     >>> hp.nest2ring(2, np.arange(10))
     array([13,  5,  4,  0, 15,  7,  6,  1, 17,  9])
-    
+
     >>> hp.nest2ring([1, 2, 4, 8], 11)
     array([ 11,   2,  12, 211])
     """
-    check_nside(nside)
+    check_nside(nside, nest=True)
     return pixlib._nest2ring(nside, ipix)
 
 @accept_ma
 def reorder(map_in, inp=None, out=None, r2n=None, n2r=None):
-    """Reorder an healpix map from RING/NESTED ordering to NESTED/RING
+    """Reorder a healpix map from RING/NESTED ordering to NESTED/RING
 
     Parameters
     ----------
@@ -788,7 +785,7 @@ def reorder(map_in, inp=None, out=None, r2n=None, n2r=None):
     Returns
     -------
     map_out : array-like
-      the reordered map, as masked array if the input was a 
+      the reordered map, as masked array if the input was a
       masked array
 
     Notes
@@ -819,16 +816,16 @@ def reorder(map_in, inp=None, out=None, r2n=None, n2r=None):
     >>> m[2][2] = hp.UNSEEN
     >>> m = hp.ma(m)
     >>> hp.reorder(m, n2r = True)
-    (masked_array(data = [0.0 1.0 -- 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0 11.0],
-                 mask = [False False  True False False False False False False False False False],
+    masked_array(data =
+     [[0.0 1.0 -- 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0 11.0]
+     [0.0 1.0 -- 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0 11.0]
+     [0.0 1.0 -- 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0 11.0]],
+                 mask =
+     [[False False  True False False False False False False False False False]
+     [False False  True False False False False False False False False False]
+     [False False  True False False False False False False False False False]],
            fill_value = -1.6375e+30)
-    , masked_array(data = [0.0 1.0 -- 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0 11.0],
-                 mask = [False False  True False False False False False False False False False],
-           fill_value = -1.6375e+30)
-    , masked_array(data = [0.0 1.0 -- 3.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0 11.0],
-                 mask = [False False  True False False False False False False False False False],
-           fill_value = -1.6375e+30)
-    )
+    <BLANKLINE>
     """
     typ = maptype(map_in)
     if typ == 0:
@@ -877,7 +874,7 @@ def reorder(map_in, inp=None, out=None, r2n=None, n2r=None):
     if typ == 0:
         return mapout[0]
     else:
-        return mapout
+        return np.array(mapout)
 
 def nside2npix(nside):
     """Give the number of pixels for the given nside.
@@ -892,7 +889,7 @@ def nside2npix(nside):
     -------
     npix : int
       corresponding number of pixels
-    
+
     Notes
     -----
     Raise a ValueError exception if nside is not valid.
@@ -908,12 +905,9 @@ def nside2npix(nside):
     True
 
     >>> hp.nside2npix(7)
-    Traceback (most recent call last):
-        ...
-    ValueError: 7 is not a valid nside parameter (must be a power of 2, less than 2**30)
+    588
     """
-    check_nside(nside)
-    return 12*nside**2
+    return 12*nside*nside
 
 def nside2order(nside):
     """Give the resolution order for a given nside.
@@ -948,7 +942,7 @@ def nside2order(nside):
         ...
     ValueError: 7 is not a valid nside parameter (must be a power of 2, less than 2**30)
     """
-    check_nside(nside)
+    check_nside(nside, nest=True)
     return len('{0:b}'.format(nside)) - 1
 
 def nside2resol(nside, arcmin=False):
@@ -983,17 +977,14 @@ def nside2resol(nside, arcmin=False):
     0.0039973699529159707
 
     >>> hp.nside2resol(7)
-    Traceback (most recent call last):
-       ...
-    ValueError: 7 is not a valid nside parameter (must be a power of 2, less than 2**30)
+    0.1461895297066412
     """
-    check_nside(nside)
-    
+
     resol = np.sqrt(nside2pixarea(nside))
 
     if arcmin:
         resol = np.rad2deg(resol) * 60
-        
+
     return resol
 
 
@@ -1026,17 +1017,14 @@ def nside2pixarea(nside, degrees=False):
     1.5978966540475428e-05
 
     >>> hp.nside2pixarea(7)
-    Traceback (most recent call last):
-       ...
-    ValueError: 7 is not a valid nside parameter (must be a power of 2, less than 2**30)
+    0.021371378595848933
     """
-    check_nside(nside)
-    
+
     pixarea = 4*np.pi/nside2npix(nside)
 
     if degrees:
         pixarea = np.rad2deg(np.rad2deg(pixarea))
-        
+
     return pixarea
 
 def npix2nside(npix):
@@ -1046,7 +1034,7 @@ def npix2nside(npix):
     ----------
     npix : int
       the number of pixels
-    
+
     Returns
     -------
     nside : int
@@ -1055,7 +1043,7 @@ def npix2nside(npix):
     Notes
     -----
     Raise a ValueError exception if number of pixel does not correspond to
-    the number of pixel of an healpix map.
+    the number of pixel of a healpix map.
 
     Examples
     --------
@@ -1071,12 +1059,9 @@ def npix2nside(npix):
         ...
     ValueError: Wrong pixel number (it is not 12*nside**2)
     """
-    nside = np.sqrt(npix/12.)
-    if nside != np.floor(nside):
+    if not isnpixok(npix):
         raise ValueError("Wrong pixel number (it is not 12*nside**2)")
-    nside=int(np.floor(nside))
-    check_nside(nside)
-    return nside
+    return int(np.sqrt(npix/12.))
 
 def order2nside(order):
     """Give the nside parameter for the given resolution order.
@@ -1110,11 +1095,13 @@ def order2nside(order):
     ValueError: 2147483648 is not a valid nside parameter (must be a power of 2, less than 2**30)
     """
     nside = 1<<order
-    check_nside(nside)
+    check_nside(nside, nest=True)
     return nside
 
-def isnsideok(nside):
+def isnsideok(nside, nest=False):
     """Returns :const:`True` if nside is a valid nside parameter, :const:`False` otherwise.
+
+    NSIDE needs to be a power of 2 only for nested ordering
 
     Parameters
     ----------
@@ -1129,29 +1116,34 @@ def isnsideok(nside):
     Examples
     --------
     >>> import healpy as hp
-    >>> hp.isnsideok(13)
+    >>> hp.isnsideok(13, nest=True)
     False
-    
+
+    >>> hp.isnsideok(13, nest=False)
+    True
+
     >>> hp.isnsideok(32)
     True
 
-    >>> hp.isnsideok([1, 2, 3, 4, 8, 16])
+    >>> hp.isnsideok([1, 2, 3, 4, 8, 16], nest=True)
     array([ True,  True, False,  True,  True,  True], dtype=bool)
     """
     # we use standard bithacks from http://graphics.stanford.edu/~seander/bithacks.html#DetermineIfPowerOf2
     if hasattr(nside, '__len__'):
         if not isinstance(nside, np.ndarray):
             nside = np.asarray(nside)
-        return ((nside == nside.astype(np.int)) & (0 < nside) &
-                (nside <= max_nside) &
-                ((nside.astype(np.int) & (nside.astype(np.int) - 1)) == 0))
+        is_nside_ok = (nside == nside.astype(np.int)) & (nside > 0) & (nside <= max_nside)
+        if nest:
+            is_nside_ok &= (nside.astype(np.int) & (nside.astype(np.int) - 1)) == 0
     else:
-        return (nside == int(nside) and 0 < nside <= max_nside and
-               (int(nside) & (int(nside) - 1)) == 0)
+        is_nside_ok = nside == int(nside) and 0 < nside <= max_nside
+        if nest:
+            is_nside_ok = is_nside_ok and (int(nside) & (int(nside) - 1)) == 0
+    return is_nside_ok
 
-def check_nside(nside):
+def check_nside(nside, nest=False):
     """Raises exception is nside is not valid"""
-    if not np.all(isnsideok(nside)):
+    if not np.all(isnsideok(nside, nest=nest)):
         raise ValueError("%s is not a valid nside parameter (must be a power of 2, less than 2**30)" % str(nside))
 
 def isnpixok(npix):
@@ -1172,19 +1164,15 @@ def isnpixok(npix):
     >>> import healpy as hp
     >>> hp.isnpixok(12)
     True
-    
+
     >>> hp.isnpixok(768)
     True
 
     >>> hp.isnpixok([12, 768, 1002])
     array([ True,  True, False], dtype=bool)
     """
-    if hasattr(npix,'__len__'):
-        nside = np.sqrt(np.asarray(npix)/12.)
-        return isnsideok(nside)
-    else:
-        nside = np.sqrt(npix/12.)
-        return isnsideok(nside)
+    nside = np.sqrt(np.asarray(npix)/12.)
+    return nside == np.floor(nside)
 
 def get_interp_val(m,theta,phi,nest=False,lonlat=False):
     """Return the bi-linear interpolation value of a map using 4 nearest neighbours.
@@ -1192,7 +1180,7 @@ def get_interp_val(m,theta,phi,nest=False,lonlat=False):
     Parameters
     ----------
     m : array-like
-      an healpix map, accepts masked arrays
+      a healpix map, accepts masked arrays
     theta, phi : float, scalar or array-like
       angular coordinates of point at which to interpolate the map
     nest : bool
@@ -1238,9 +1226,6 @@ def get_interp_val(m,theta,phi,nest=False,lonlat=False):
     w=np.array(r[4:8])
     del r
     return np.sum(m2[p]*w,0)
-
-def get_neighbours(nside, theta, phi=None, nest=False):
-    raise NameError("get_neighbours has been renamed to get_interp_weights")
 
 def get_interp_weights(nside,theta,phi=None,nest=False,lonlat=False):
     """Return the 4 closest pixels on the two rings above and below the
@@ -1291,8 +1276,8 @@ def get_interp_weights(nside,theta,phi=None,nest=False,lonlat=False):
            [ 0.25,  0.  ],
            [ 0.25,  0.  ]]))
     """
-    check_nside(nside)
-    if phi == None:
+    check_nside(nside, nest=nest)
+    if phi is None:
         theta,phi = pix2ang(nside,theta,nest=nest)
     elif lonlat:
         theta,phi = lonlat2thetaphi(theta,phi)
@@ -1344,7 +1329,7 @@ def get_all_neighbours(nside, theta, phi=None, nest=False, lonlat=False):
     >>> hp.get_all_neighbours(1, 90, 0, lonlat=True)
     array([ 8,  4,  0, -1,  1,  6,  9, -1])
     """
-    check_nside(nside)
+    check_nside(nside, nest=nest)
     if phi is not None:
         theta = ang2pix(nside, theta, phi, nest=nest, lonlat=lonlat)
     if nest:
@@ -1374,7 +1359,7 @@ def max_pixrad(nside):
     >>> '%.15f' % max_pixrad(16)
     '0.066014761432513'
     """
-    check_nside(nside)
+    check_nside(nside, nest=False)
     return pixlib._max_pixrad(nside)
 
 def fit_dipole(m, nest=False, bad=UNSEEN, gal_cut=0):
@@ -1388,7 +1373,7 @@ def fit_dipole(m, nest=False, bad=UNSEEN, gal_cut=0):
       if ``False`` m is assumed in RING scheme, otherwise map is NESTED
     bad : float
       bad values of pixel, default to :const:`UNSEEN`.
-    gal_cut : float
+    gal_cut : float [degrees]
       pixels at latitude in [-gal_cut;+gal_cut] degrees are not taken into account
 
     Returns
@@ -1459,7 +1444,7 @@ def remove_dipole(m,nest=False,bad=UNSEEN,gal_cut=0,fitval=False,
       if ``False`` m is assumed in RING scheme, otherwise map is NESTED
     bad : float
       bad values of pixel, default to :const:`UNSEEN`.
-    gal_cut : float
+    gal_cut : float [degrees]
       pixels at latitude in [-gal_cut;+gal_cut] are not taken into account
     fitval : bool
       whether to return or not the fitted values of monopole and dipole
@@ -1472,7 +1457,7 @@ def remove_dipole(m,nest=False,bad=UNSEEN,gal_cut=0,fitval=False,
     -------
     res : array or tuple of length 3
       if fitval is False, returns map with monopole and dipole subtracted,
-      otherwise, returns map (array, in res[0]), monopole (float, in res[1]), 
+      otherwise, returns map (array, in res[0]), monopole (float, in res[1]),
       dipole_vector (array, in res[2])
 
     See Also
@@ -1501,7 +1486,7 @@ def remove_dipole(m,nest=False,bad=UNSEEN,gal_cut=0,fitval=False,
     if verbose:
         from . import rotator as R
         lon,lat = R.vec2dir(dipole,lonlat=True)
-        amp = np.sqrt((dipole**2).sum())
+        amp = np.sqrt((dipole*dipole).sum())
         print(
             'monopole: {0:g}  dipole: lon: {1:g}, lat: {2:g}, amp: {3:g}'
             .format(mono, lon, lat, amp))
@@ -1523,7 +1508,7 @@ def fit_monopole(m,nest=False,bad=UNSEEN,gal_cut=0):
       if ``False`` m is assumed in RING scheme, otherwise map is NESTED
     bad : float
       bad values of pixel, default to :const:`UNSEEN`.
-    gal_cut : float
+    gal_cut : float [degrees]
       pixels at latitude in [-gal_cut;+gal_cut] degrees are not taken into account
 
     Returns
@@ -1573,7 +1558,7 @@ def remove_monopole(m,nest=False,bad=UNSEEN,gal_cut=0,fitval=False,
       if ``False`` m is assumed in RING scheme, otherwise map is NESTED
     bad : float
       bad values of pixel, default to :const:`UNSEEN`.
-    gal_cut : float
+    gal_cut : float [degrees]
       pixels at latitude in [-gal_cut;+gal_cut] are not taken into account
     fitval : bool
       whether to return or not the fitted value of monopole
@@ -1620,7 +1605,7 @@ def remove_monopole(m,nest=False,bad=UNSEEN,gal_cut=0,fitval=False,
 def get_map_size(m):
     """Returns the npix of a given map (implicit or explicit pixelization).
 
-     If map is a dict type, assumes explicit pixelization: use nside key if present, or use 
+     If map is a dict type, assumes explicit pixelization: use nside key if present, or use
      nside attribute if present, otherwise use the smallest valid npix given the maximum key value.
      otherwise assumes implicit pixelization and returns len(m).
 
@@ -1689,7 +1674,7 @@ def get_min_valid_nside(npix):
     8
     """
     order = 0.5 * np.log2(npix / 12.)
-    return 2**int(np.ceil(order))
+    return 1<<int(np.ceil(order))
 
 
 def get_nside(m):
@@ -1757,7 +1742,7 @@ def ud_grade(map_in,nside_out,pess=False,order_in='RING',order_out=None,
     array([  5.5 ,   7.25,   9.  ,  10.75,  21.75,  21.75,  23.75,  25.75,
             36.5 ,  38.25,  40.  ,  41.75])
     """
-    check_nside(nside_out)
+    check_nside(nside_out, nest=order_in!='RING')
     typ = maptype(map_in)
     if typ<0:
         raise TypeError('Invalid map')
@@ -1777,7 +1762,7 @@ def ud_grade(map_in,nside_out,pess=False,order_in='RING',order_out=None,
     if typ == 0:
         return mapout[0]
     else:
-        return mapout
+        return np.array(mapout)
 
 def _ud_grade_core(m,nside_out,pess=False,power=None, dtype=None):
     """Internal routine used by ud_grade. It assumes that the map is NESTED
@@ -1788,7 +1773,7 @@ def _ud_grade_core(m,nside_out,pess=False,power=None, dtype=None):
         type_out = dtype
     else:
         type_out = type(m[0])
-    check_nside(nside_out)
+    check_nside(nside_out, nest=True)
     npix_in = nside2npix(nside_in)
     npix_out = nside2npix(nside_out)
 
@@ -1797,7 +1782,7 @@ def _ud_grade_core(m,nside_out,pess=False,power=None, dtype=None):
         ratio = (float(nside_out)/float(nside_in))**power
     else:
         ratio = 1
-    
+
     if nside_out > nside_in:
         rat2 = npix_out//npix_in
         fact = np.ones(rat2, dtype=type_out)*ratio
